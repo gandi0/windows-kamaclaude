@@ -1,5 +1,7 @@
 # KamaClaude
 
+> 如果你还没有用过Codex、Claude code 这样的Agent，强烈建议用一用： [国内充值ChatGPT PLus、Pro 的方法](https://github.com/youngyangyang04/gpt-daichong)
+
 我最近在公众号「卡码大模型」上，更新了很多关于 Agent、codex、Claude工作原理的文章。
 
 这些文章目前已经沉淀在卡码笔记上：[https://notes.kamacoder.com](https://notes.kamacoder.com)
