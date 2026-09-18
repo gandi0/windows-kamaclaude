@@ -215,23 +215,33 @@ class CoreApp:
         logger.info("kama-core %s listening addr=%s", kama_claude.__version__, addr)
         logger.info("config: %s", self._config)
 
-        loop = asyncio.get_running_loop()
-        shutdown = asyncio.Event()
-        loop.add_signal_handler(signal.SIGINT, shutdown.set)
-        loop.add_signal_handler(signal.SIGTERM, shutdown.set)
+        try:
+            loop = asyncio.get_running_loop()
+            shutdown = asyncio.Event()
+            try:
+                loop.add_signal_handler(signal.SIGINT, shutdown.set)
+            except NotImplementedError:
+                logger.debug("SIGINT handler is not supported by this event loop")
+            try:
+                loop.add_signal_handler(signal.SIGTERM, shutdown.set)
+            except NotImplementedError:
+                logger.debug("SIGTERM handler is not supported by this event loop")
 
-        await shutdown.wait()
-
-        logger.info("shutting down")
-        for run_task in list(self._running_runs):
-            run_task.cancel()
-        if self._running_runs:
-            await asyncio.gather(*self._running_runs, return_exceptions=True)
-        await server.stop()
-        if self._trace is not None:
-            await self._trace.stop()
+            await shutdown.wait()
+        finally:
+            logger.info("shutting down")
+            for run_task in list(self._running_runs):
+                run_task.cancel()
+            if self._running_runs:
+                await asyncio.gather(*self._running_runs, return_exceptions=True)
+            await server.stop()
+            if self._trace is not None:
+                await self._trace.stop()
 
 
 # 同步入口：启动 CoreApp 事件循环
 def run() -> None:
-    asyncio.run(CoreApp().run())
+    try:
+        asyncio.run(CoreApp().run())
+    except KeyboardInterrupt:
+        logger.info("kama-core interrupted")
