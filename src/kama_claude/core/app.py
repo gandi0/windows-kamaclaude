@@ -124,15 +124,23 @@ class CoreApp:
 
         loop = asyncio.get_running_loop()
         shutdown = asyncio.Event()
-        loop.add_signal_handler(signal.SIGINT, shutdown.set)
-        loop.add_signal_handler(signal.SIGTERM, shutdown.set)
+        try:
+            try:
+                loop.add_signal_handler(signal.SIGINT, shutdown.set)
+                loop.add_signal_handler(signal.SIGTERM, shutdown.set)
+            except NotImplementedError:
+                # Windows relies on asyncio.run() cancelling the task on Ctrl+C.
+                pass
 
-        await shutdown.wait()
-
-        logger.info("shutting down")
-        await server.stop()
+            await shutdown.wait()
+        finally:
+            logger.info("shutting down")
+            await server.stop()
 
 
 # 同步入口：启动 CoreApp 事件循环
 def run() -> None:
-    asyncio.run(CoreApp().run())
+    try:
+        asyncio.run(CoreApp().run())
+    except KeyboardInterrupt:
+        pass
