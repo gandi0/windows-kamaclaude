@@ -1,5 +1,0 @@
-{
-  "method": "Compare current Ruff diagnostics with git show HEAD source per file, matching code/message multiplicity; no rule relaxation",
-  "current_count": 42,
-  "new_diagnostics": []
-}

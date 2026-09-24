@@ -16,3 +16,10 @@ uv.lock
 .DS_Store
 *.log
 workspace/
+# Test artifacts
+docs/*/evidence/
+docs/*/results/
+.test-tmp/
+check_db.py
+.env.swp
+test

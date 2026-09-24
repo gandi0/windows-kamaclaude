@@ -1,8 +1,0 @@
-{
-  "verified": true,
-  "mode": "s81_regression",
-  "ping": "ok",
-  "shutdown": "SIGINT raised inside test process; clean exit",
-  "provider": "real lazy provider, no API Key",
-  "api_calls": 0
-}

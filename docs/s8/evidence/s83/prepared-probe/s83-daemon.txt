@@ -1,2 +1,0 @@
-{"check": "s83-daemon", "command": ["F:\\exercise\\2026\\kamaclaude - v1\\KamaClaude\\.venv\\Scripts\\python.exe", "scripts/s8/probe_s83.py", "--output", "F:\\wend\\ChatGPT\\kamaclaude优化\\.s83-work\\main\\docs\\s8\\evidence\\s83\\prepared-probe\\probe.json"], "exit_code": 0, "seconds": 79.906}
-{"output": "F:\\wend\\ChatGPT\\kamaclaude优化\\.s83-work\\main\\docs\\s8\\evidence\\s83\\prepared-probe\\probe.json", "returncode": 0, "duration_s": 79.641, "operation_log_count": 32, "artifact_count": 8, "timed_out": false}

@@ -1,2 +1,0 @@
-{"check": "mypy", "command": ["F:\\exercise\\2026\\kamaclaude - v1\\KamaClaude\\.venv\\Scripts\\python.exe", "-m", "mypy", "src"], "exit_code": 0, "seconds": 10.344}
-Success: no issues found in 89 source files

@@ -1,2 +1,0 @@
-{"check": "tui-first", "command": ["F:\\exercise\\2026\\kamaclaude - v1\\KamaClaude\\.venv\\Scripts\\python.exe", "scripts/s8/probe_s83.py", "--output", "docs/s8/evidence/s83/first-tui/probe.json", "--pytest-arg=-k", "--pytest-arg=live_tui_unknown"], "exit_code": 5, "seconds": 1.703}
-{"output": "F:\\wend\\ChatGPT\\kamaclaude优化\\.s83-work\\main\\docs\\s8\\evidence\\s83\\first-tui\\probe.json", "returncode": 5, "duration_s": 1.472, "operation_log_count": 0, "artifact_count": 0, "timed_out": false}

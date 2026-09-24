@@ -1,2 +1,0 @@
-{"check": "mypy", "command": ["F:\\wend\\ChatGPT\\kamaclaude优化\\KamaClaude\\.venv\\Scripts\\python.exe", "-m", "mypy", "src"], "exit_code": 0, "seconds": 0.635}
-Success: no issues found in 89 source files

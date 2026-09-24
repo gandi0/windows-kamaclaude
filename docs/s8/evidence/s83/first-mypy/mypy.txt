@@ -1,3 +1,0 @@
-{"check": "mypy", "command": ["F:\\exercise\\2026\\kamaclaude - v1\\KamaClaude\\.venv\\Scripts\\python.exe", "-m", "mypy", "src"], "exit_code": 1, "seconds": 10.515}
-src\kama_claude\tui\app.py:1616: error: Incompatible types in assignment (expression has type "str | None", variable has type "str")  [assignment]
-Found 1 error in 1 file (checked 94 source files)
