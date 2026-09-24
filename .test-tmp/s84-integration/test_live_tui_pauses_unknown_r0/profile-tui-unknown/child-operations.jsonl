@@ -1,0 +1,4 @@
+{"ts": 1790213085.7142253, "pid": 3864, "operation": "daemon.start", "scenario": "unknown-result"}
+{"ts": 1790213087.9706564, "pid": 3864, "operation": "provider.chat", "count": 1, "run_id": "20260924-012447-e5ee77", "step": 1}
+{"ts": 1790213088.348202, "pid": 3864, "operation": "barrier.reached", "name": "before-result-commit"}
+{"ts": 1790213089.7747636, "pid": 9648, "operation": "daemon.start", "scenario": "unknown-result"}

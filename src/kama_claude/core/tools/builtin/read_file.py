@@ -15,6 +15,8 @@ class ReadFileParams(BaseModel):
 
 
 class ReadFileTool(BaseTool):
+    effect = "read_only"
+    retry_safe = True
     params_model = ReadFileParams
     name = "read_file"
     description = (
@@ -40,7 +42,7 @@ class ReadFileTool(BaseTool):
         if ".." in Path(path_str).parts:
             raise PermissionError(f"path traversal not allowed: {path_str}")
 
-        path = Path(path_str)
+        path = self.workspace / path_str
         raw = path.read_bytes()  # raises FileNotFoundError if absent
         truncated = len(raw) > _MAX_BYTES
         text = raw[:_MAX_BYTES].decode("utf-8", errors="replace")

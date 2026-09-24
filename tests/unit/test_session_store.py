@@ -2,6 +2,9 @@ from __future__ import annotations
 
 from pathlib import Path
 
+import pytest
+
+from kama_claude.core.session.execution import StorageError
 from kama_claude.core.session.model import Session
 from kama_claude.core.session.store import SessionStore
 
@@ -66,9 +69,9 @@ def test_thread_message_roundtrip_with_tool_blocks(tmp_path: Path) -> None:
     ]
 
 
-# 功能：验证 thread 尾部孤儿 tool_use 会被裁掉
-# 设计：构造一条未配对 tool_result 的 assistant tool_use，读取时只返回最后一次配平之前的消息，避免 API 报 messages.invalid
-def test_read_messages_trims_orphan_tool_use_tail(tmp_path: Path) -> None:
+# 功能：验证孤儿调用保留在原始历史，并阻止送入模型而不是静默裁掉
+# 设计：构造中断批次，分别检查完整原始记录和模型投影拒绝，避免隐藏未确认副作用
+def test_read_messages_preserves_orphan_and_blocks_projection(tmp_path: Path) -> None:
     store = SessionStore(tmp_path)
     store.append_message("sess-1", "user", "hello")
     store.append_message(
@@ -77,7 +80,9 @@ def test_read_messages_trims_orphan_tool_use_tail(tmp_path: Path) -> None:
         [{"type": "tool_use", "id": "orphan", "name": "read_file", "input": {}}],
         run_id="run-1",
     )
-    assert store.read_messages("sess-1") == [{"role": "user", "content": "hello"}]
+    assert len(store.read_raw_messages("sess-1")) == 2
+    with pytest.raises(StorageError, match="unresolved"):
+        store.read_messages("sess-1")
 
 
 # 功能：验证 notes.md 不存在时读为空，追加笔记后能读到内容和 run_id

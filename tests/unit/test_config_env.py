@@ -7,6 +7,13 @@ import pytest
 from kama_claude.core.config import get_config
 
 
+# 仅在临时配置用例内启用 dotenv，保持其余测试与真实项目密钥隔离
+@pytest.fixture(autouse=True)
+def _enable_temporary_dotenv(monkeypatch: pytest.MonkeyPatch, tmp_path: Path) -> None:
+    monkeypatch.chdir(tmp_path)
+    monkeypatch.delenv("PYTHON_DOTENV_DISABLED", raising=False)
+
+
 def _write_env(path: Path, content: str) -> None:
     path.write_text(content, encoding="utf-8")
 

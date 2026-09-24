@@ -1,0 +1,6 @@
+{"ts": 1790213057.0139573, "pid": 29368, "operation": "daemon.start", "scenario": "child"}
+{"ts": 1790213059.2805467, "pid": 29368, "operation": "provider.chat", "count": 1, "run_id": "20260924-012419-a0a80a", "step": 1}
+{"ts": 1790213059.2973669, "pid": 29368, "operation": "provider.chat", "count": 2, "run_id": "20260924-012419-a0a80a", "step": 2}
+{"ts": 1790213059.3025675, "pid": 29368, "operation": "provider.chat", "count": 3, "run_id": "20260924-012419-13c6f0", "step": 1}
+{"ts": 1790213059.3025675, "pid": 29368, "operation": "barrier.reached", "name": "child-model-entry"}
+{"ts": 1790213060.7366264, "pid": 30084, "operation": "daemon.start", "scenario": "child"}

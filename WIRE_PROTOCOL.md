@@ -297,6 +297,7 @@ All commands are sent as JSON-RPC 2.0 requests. The `type` field inside `params`
 | `type` | `string` | no |
 | `mode` | `string` | no |
 | `title` | `string` | no |
+| `workspace` | `string | null` | no |
 
 ```json
 {
@@ -320,6 +321,18 @@ All commands are sent as JSON-RPC 2.0 requests. The `type` field inside `params`
       "default": "",
       "title": "Title",
       "type": "string"
+    },
+    "workspace": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Workspace"
     }
   },
   "title": "SessionCreateCommand",
@@ -394,6 +407,7 @@ All commands are sent as JSON-RPC 2.0 requests. The `type` field inside `params`
 | `type` | `string` | no |
 | `session_id` | `string` | yes |
 | `content` | `string` | yes |
+| `request_id` | `string | null` | no |
 
 ```json
 {
@@ -411,6 +425,20 @@ All commands are sent as JSON-RPC 2.0 requests. The `type` field inside `params`
     "content": {
       "title": "Content",
       "type": "string"
+    },
+    "request_id": {
+      "anyOf": [
+        {
+          "maxLength": 200,
+          "minLength": 1,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Request Id"
     }
   },
   "required": [
@@ -580,6 +608,404 @@ All commands are sent as JSON-RPC 2.0 requests. The `type` field inside `params`
   "type": "object"
 }
 ```
+### session.list
+
+### SessionListCommand
+
+| Field | Type | Required |
+|---|---|---|
+| `type` | `string` | no |
+
+```json
+{
+  "properties": {
+    "type": {
+      "const": "session.list",
+      "default": "session.list",
+      "title": "Type",
+      "type": "string"
+    }
+  },
+  "title": "SessionListCommand",
+  "type": "object"
+}
+```
+### SessionListResult
+
+| Field | Type | Required |
+|---|---|---|
+| `sessions` | `array` | yes |
+
+```json
+{
+  "properties": {
+    "sessions": {
+      "items": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "title": "Sessions",
+      "type": "array"
+    }
+  },
+  "required": [
+    "sessions"
+  ],
+  "title": "SessionListResult",
+  "type": "object"
+}
+```
+### session.status
+
+### SessionStatusCommand
+
+| Field | Type | Required |
+|---|---|---|
+| `type` | `string` | no |
+| `session_id` | `string` | yes |
+
+```json
+{
+  "properties": {
+    "type": {
+      "const": "session.status",
+      "default": "session.status",
+      "title": "Type",
+      "type": "string"
+    },
+    "session_id": {
+      "title": "Session Id",
+      "type": "string"
+    }
+  },
+  "required": [
+    "session_id"
+  ],
+  "title": "SessionStatusCommand",
+  "type": "object"
+}
+```
+### SessionStatusResult
+
+| Field | Type | Required |
+|---|---|---|
+| `session` | `object` | yes |
+| `runs` | `array` | yes |
+| `calls` | `array` | yes |
+| `reviews` | `array` | yes |
+| `children` | `array` | yes |
+
+```json
+{
+  "properties": {
+    "session": {
+      "additionalProperties": true,
+      "title": "Session",
+      "type": "object"
+    },
+    "runs": {
+      "items": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "title": "Runs",
+      "type": "array"
+    },
+    "calls": {
+      "items": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "title": "Calls",
+      "type": "array"
+    },
+    "reviews": {
+      "items": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "title": "Reviews",
+      "type": "array"
+    },
+    "children": {
+      "items": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "title": "Children",
+      "type": "array"
+    }
+  },
+  "required": [
+    "session",
+    "runs",
+    "calls",
+    "reviews",
+    "children"
+  ],
+  "title": "SessionStatusResult",
+  "type": "object"
+}
+```
+### session.resume
+
+### SessionResumeCommand
+
+| Field | Type | Required |
+|---|---|---|
+| `type` | `string` | no |
+| `session_id` | `string` | yes |
+| `run_id` | `string` | yes |
+| `workspace` | `string` | yes |
+
+```json
+{
+  "properties": {
+    "type": {
+      "const": "session.resume",
+      "default": "session.resume",
+      "title": "Type",
+      "type": "string"
+    },
+    "session_id": {
+      "title": "Session Id",
+      "type": "string"
+    },
+    "run_id": {
+      "title": "Run Id",
+      "type": "string"
+    },
+    "workspace": {
+      "title": "Workspace",
+      "type": "string"
+    }
+  },
+  "required": [
+    "session_id",
+    "run_id",
+    "workspace"
+  ],
+  "title": "SessionResumeCommand",
+  "type": "object"
+}
+```
+### SessionResumeResult
+
+| Field | Type | Required |
+|---|---|---|
+| `run_id` | `string` | yes |
+| `status` | `string` | yes |
+| `started` | `boolean` | no |
+| `reason` | `string | null` | no |
+
+```json
+{
+  "properties": {
+    "run_id": {
+      "title": "Run Id",
+      "type": "string"
+    },
+    "status": {
+      "title": "Status",
+      "type": "string"
+    },
+    "started": {
+      "default": false,
+      "title": "Started",
+      "type": "boolean"
+    },
+    "reason": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Reason"
+    }
+  },
+  "required": [
+    "run_id",
+    "status"
+  ],
+  "title": "SessionResumeResult",
+  "type": "object"
+}
+```
+### session.review
+
+### SessionReviewCommand
+
+| Field | Type | Required |
+|---|---|---|
+| `type` | `string` | no |
+| `session_id` | `string` | yes |
+| `run_id` | `string` | yes |
+| `action` | `string` | yes |
+| `note` | `string` | yes |
+
+```json
+{
+  "properties": {
+    "type": {
+      "const": "session.review",
+      "default": "session.review",
+      "title": "Type",
+      "type": "string"
+    },
+    "session_id": {
+      "title": "Session Id",
+      "type": "string"
+    },
+    "run_id": {
+      "title": "Run Id",
+      "type": "string"
+    },
+    "action": {
+      "enum": [
+        "pause",
+        "abandon"
+      ],
+      "title": "Action",
+      "type": "string"
+    },
+    "note": {
+      "minLength": 1,
+      "title": "Note",
+      "type": "string"
+    }
+  },
+  "required": [
+    "session_id",
+    "run_id",
+    "action",
+    "note"
+  ],
+  "title": "SessionReviewCommand",
+  "type": "object"
+}
+```
+### SessionResumeResult
+
+| Field | Type | Required |
+|---|---|---|
+| `run_id` | `string` | yes |
+| `status` | `string` | yes |
+| `started` | `boolean` | no |
+| `reason` | `string | null` | no |
+
+```json
+{
+  "properties": {
+    "run_id": {
+      "title": "Run Id",
+      "type": "string"
+    },
+    "status": {
+      "title": "Status",
+      "type": "string"
+    },
+    "started": {
+      "default": false,
+      "title": "Started",
+      "type": "boolean"
+    },
+    "reason": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Reason"
+    }
+  },
+  "required": [
+    "run_id",
+    "status"
+  ],
+  "title": "SessionResumeResult",
+  "type": "object"
+}
+```
+### permission.respond
+
+### PermissionRespondCommand
+
+| Field | Type | Required |
+|---|---|---|
+| `type` | `string` | no |
+| `tool_use_id` | `string` | yes |
+| `decision` | `string` | yes |
+| `approval_id` | `string | null` | no |
+
+```json
+{
+  "properties": {
+    "type": {
+      "const": "permission.respond",
+      "default": "permission.respond",
+      "title": "Type",
+      "type": "string"
+    },
+    "tool_use_id": {
+      "title": "Tool Use Id",
+      "type": "string"
+    },
+    "decision": {
+      "title": "Decision",
+      "type": "string"
+    },
+    "approval_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Approval Id"
+    }
+  },
+  "required": [
+    "tool_use_id",
+    "decision"
+  ],
+  "title": "PermissionRespondCommand",
+  "type": "object"
+}
+```
+### PermissionRespondResult
+
+| Field | Type | Required |
+|---|---|---|
+| `ok` | `boolean` | no |
+
+```json
+{
+  "properties": {
+    "ok": {
+      "default": true,
+      "title": "Ok",
+      "type": "boolean"
+    }
+  },
+  "title": "PermissionRespondResult",
+  "type": "object"
+}
+```
+A user submission should keep the same `request_id` when retried. The key is scoped to its session; changing the content conflicts. The JSON-RPC `id` is only a transport correlation ID. `session.send_message` returns after durable acceptance; completion arrives as events.
+
+Recovery never replays calls with unknown effects. `session.review` records `pause` or `abandon` with a required note. Abandon closes the session and retains unresolved facts; it does not undo effects. Approval replies must carry the fresh `approval_id` from the current daemon event.
+
 
 ## Server Push
 
@@ -667,6 +1093,241 @@ Events sent over the IPC socket (daemon → client).
   "type": "object"
 }
 ```
+### PermissionRequestedEvent
+
+| Field | Type | Required |
+|---|---|---|
+| `type` | `string` | no |
+| `run_id` | `string` | yes |
+| `tool_use_id` | `string` | yes |
+| `tool_name` | `string` | yes |
+| `params` | `object` | yes |
+| `param_preview` | `string` | yes |
+| `session_id` | `string` | yes |
+| `ts` | `string` | yes |
+| `approval_id` | `string | null` | no |
+| `daemon_epoch` | `string | null` | no |
+
+```json
+{
+  "properties": {
+    "type": {
+      "const": "permission.requested",
+      "default": "permission.requested",
+      "title": "Type",
+      "type": "string"
+    },
+    "run_id": {
+      "title": "Run Id",
+      "type": "string"
+    },
+    "tool_use_id": {
+      "title": "Tool Use Id",
+      "type": "string"
+    },
+    "tool_name": {
+      "title": "Tool Name",
+      "type": "string"
+    },
+    "params": {
+      "additionalProperties": true,
+      "title": "Params",
+      "type": "object"
+    },
+    "param_preview": {
+      "title": "Param Preview",
+      "type": "string"
+    },
+    "session_id": {
+      "title": "Session Id",
+      "type": "string"
+    },
+    "ts": {
+      "title": "Ts",
+      "type": "string"
+    },
+    "approval_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Approval Id"
+    },
+    "daemon_epoch": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Daemon Epoch"
+    }
+  },
+  "required": [
+    "run_id",
+    "tool_use_id",
+    "tool_name",
+    "params",
+    "param_preview",
+    "session_id",
+    "ts"
+  ],
+  "title": "PermissionRequestedEvent",
+  "type": "object"
+}
+```
+### PermissionGrantedEvent
+
+| Field | Type | Required |
+|---|---|---|
+| `type` | `string` | no |
+| `run_id` | `string` | yes |
+| `tool_use_id` | `string` | yes |
+| `decision` | `string` | yes |
+| `ts` | `string` | yes |
+| `approval_id` | `string | null` | no |
+| `daemon_epoch` | `string | null` | no |
+
+```json
+{
+  "properties": {
+    "type": {
+      "const": "permission.granted",
+      "default": "permission.granted",
+      "title": "Type",
+      "type": "string"
+    },
+    "run_id": {
+      "title": "Run Id",
+      "type": "string"
+    },
+    "tool_use_id": {
+      "title": "Tool Use Id",
+      "type": "string"
+    },
+    "decision": {
+      "title": "Decision",
+      "type": "string"
+    },
+    "ts": {
+      "title": "Ts",
+      "type": "string"
+    },
+    "approval_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Approval Id"
+    },
+    "daemon_epoch": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Daemon Epoch"
+    }
+  },
+  "required": [
+    "run_id",
+    "tool_use_id",
+    "decision",
+    "ts"
+  ],
+  "title": "PermissionGrantedEvent",
+  "type": "object"
+}
+```
+### PermissionDeniedEvent
+
+| Field | Type | Required |
+|---|---|---|
+| `type` | `string` | no |
+| `run_id` | `string` | yes |
+| `tool_use_id` | `string` | yes |
+| `decision` | `string` | yes |
+| `ts` | `string` | yes |
+| `approval_id` | `string | null` | no |
+| `daemon_epoch` | `string | null` | no |
+
+```json
+{
+  "properties": {
+    "type": {
+      "const": "permission.denied",
+      "default": "permission.denied",
+      "title": "Type",
+      "type": "string"
+    },
+    "run_id": {
+      "title": "Run Id",
+      "type": "string"
+    },
+    "tool_use_id": {
+      "title": "Tool Use Id",
+      "type": "string"
+    },
+    "decision": {
+      "title": "Decision",
+      "type": "string"
+    },
+    "ts": {
+      "title": "Ts",
+      "type": "string"
+    },
+    "approval_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Approval Id"
+    },
+    "daemon_epoch": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Daemon Epoch"
+    }
+  },
+  "required": [
+    "run_id",
+    "tool_use_id",
+    "decision",
+    "ts"
+  ],
+  "title": "PermissionDeniedEvent",
+  "type": "object"
+}
+```
 
 ## Run Events
 
@@ -678,6 +1339,7 @@ Events written to `runs/<run_id>/events.jsonl` and forwarded over IPC to subscri
 |---|---|---|
 | `type` | `string` | no |
 | `run_id` | `string` | yes |
+| `session_id` | `string | null` | no |
 | `goal` | `string` | yes |
 | `ts` | `string` | yes |
 
@@ -693,6 +1355,18 @@ Events written to `runs/<run_id>/events.jsonl` and forwarded over IPC to subscri
     "run_id": {
       "title": "Run Id",
       "type": "string"
+    },
+    "session_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Session Id"
     },
     "goal": {
       "title": "Goal",
@@ -730,6 +1404,7 @@ Events written to `runs/<run_id>/events.jsonl` and forwarded over IPC to subscri
 |---|---|---|
 | `type` | `string` | no |
 | `run_id` | `string` | yes |
+| `session_id` | `string | null` | no |
 | `status` | `string` | yes |
 | `reason` | `string | null` | no |
 | `steps` | `integer` | yes |
@@ -747,6 +1422,18 @@ Events written to `runs/<run_id>/events.jsonl` and forwarded over IPC to subscri
     "run_id": {
       "title": "Run Id",
       "type": "string"
+    },
+    "session_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Session Id"
     },
     "status": {
       "title": "Status",
@@ -910,6 +1597,7 @@ Events written to `runs/<run_id>/events.jsonl` and forwarded over IPC to subscri
 | `tool_use_id` | `string` | yes |
 | `tool_name` | `string` | yes |
 | `params` | `object` | yes |
+| `call_id` | `string` | no |
 | `ts` | `string` | yes |
 
 ```json
@@ -937,6 +1625,11 @@ Events written to `runs/<run_id>/events.jsonl` and forwarded over IPC to subscri
       "additionalProperties": true,
       "title": "Params",
       "type": "object"
+    },
+    "call_id": {
+      "default": "",
+      "title": "Call Id",
+      "type": "string"
     },
     "ts": {
       "title": "Ts",
@@ -980,6 +1673,11 @@ Events written to `runs/<run_id>/events.jsonl` and forwarded over IPC to subscri
 | `tool_name` | `string` | yes |
 | `elapsed_ms` | `integer` | yes |
 | `output` | `string` | no |
+| `call_id` | `string` | no |
+| `attempt_id` | `string` | no |
+| `attempt` | `integer` | no |
+| `outcome` | `string` | no |
+| `cleanup_confirmed` | `boolean | null` | no |
 | `ts` | `string` | yes |
 
 ```json
@@ -1011,6 +1709,43 @@ Events written to `runs/<run_id>/events.jsonl` and forwarded over IPC to subscri
       "default": "",
       "title": "Output",
       "type": "string"
+    },
+    "call_id": {
+      "default": "",
+      "title": "Call Id",
+      "type": "string"
+    },
+    "attempt_id": {
+      "default": "",
+      "title": "Attempt Id",
+      "type": "string"
+    },
+    "attempt": {
+      "default": 1,
+      "title": "Attempt",
+      "type": "integer"
+    },
+    "outcome": {
+      "default": "known",
+      "enum": [
+        "known",
+        "not_started",
+        "unknown"
+      ],
+      "title": "Outcome",
+      "type": "string"
+    },
+    "cleanup_confirmed": {
+      "anyOf": [
+        {
+          "type": "boolean"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Cleanup Confirmed"
     },
     "ts": {
       "title": "Ts",
@@ -1054,6 +1789,10 @@ Events written to `runs/<run_id>/events.jsonl` and forwarded over IPC to subscri
 | `error_message` | `string` | yes |
 | `elapsed_ms` | `integer` | yes |
 | `attempt` | `integer` | no |
+| `call_id` | `string` | no |
+| `attempt_id` | `string` | no |
+| `outcome` | `string` | no |
+| `cleanup_confirmed` | `boolean | null` | no |
 | `ts` | `string` | yes |
 
 ```json
@@ -1093,6 +1832,38 @@ Events written to `runs/<run_id>/events.jsonl` and forwarded over IPC to subscri
       "default": 1,
       "title": "Attempt",
       "type": "integer"
+    },
+    "call_id": {
+      "default": "",
+      "title": "Call Id",
+      "type": "string"
+    },
+    "attempt_id": {
+      "default": "",
+      "title": "Attempt Id",
+      "type": "string"
+    },
+    "outcome": {
+      "default": "known",
+      "enum": [
+        "known",
+        "not_started",
+        "unknown"
+      ],
+      "title": "Outcome",
+      "type": "string"
+    },
+    "cleanup_confirmed": {
+      "anyOf": [
+        {
+          "type": "boolean"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Cleanup Confirmed"
     },
     "ts": {
       "title": "Ts",

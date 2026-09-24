@@ -34,10 +34,12 @@ class Session:
     def from_dict(cls, data: dict[str, Any]) -> Session:
         return cls(
             id=str(data["id"]),
-            mode=data["mode"],
-            status=data["status"],
+            mode="one_shot" if data.get("mode") == "one_shot" else "chat",
+            status=(data["status"] if data.get("status") in {
+                "active", "waiting_for_input", "closed",
+            } else "active"),
             title=str(data.get("title", "")),
-            created_at=str(data["created_at"]),
-            updated_at=str(data["updated_at"]),
+            created_at=str(data.get("created_at", "")),
+            updated_at=str(data.get("updated_at", "")),
             run_ids=[str(x) for x in data.get("run_ids", [])],
         )

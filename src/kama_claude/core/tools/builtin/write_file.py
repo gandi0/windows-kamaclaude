@@ -16,6 +16,7 @@ class WriteFileParams(BaseModel):
 
 
 class WriteFileTool(BaseTool):
+    effect = "write"
     params_model = WriteFileParams
     name = "write_file"
     description = (
@@ -56,7 +57,7 @@ class WriteFileTool(BaseTool):
                 error_type="runtime_error",
             )
 
-        path = Path(path_str)
+        path = self.workspace / path_str
         path.parent.mkdir(parents=True, exist_ok=True)
         path.write_text(content, encoding="utf-8")
 

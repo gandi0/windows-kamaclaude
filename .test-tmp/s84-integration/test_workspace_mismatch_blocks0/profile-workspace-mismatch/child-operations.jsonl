@@ -1,0 +1,4 @@
+{"ts": 1790213042.298223, "pid": 21108, "operation": "daemon.start", "scenario": "workspace"}
+{"ts": 1790213044.5952663, "pid": 21108, "operation": "provider.chat", "count": 1, "run_id": "20260924-012404-dc3810", "step": 1}
+{"ts": 1790213044.6102872, "pid": 21108, "operation": "barrier.reached", "name": "before-start-attempt"}
+{"ts": 1790213046.0473304, "pid": 29812, "operation": "daemon.start", "scenario": "workspace"}

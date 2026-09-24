@@ -1,0 +1,5 @@
+# ~/.kama/policy.toml
+# 由 kama-core 自动管理，手动编辑生效但格式须正确
+
+[always]
+bash = "allow"

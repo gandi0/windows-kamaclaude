@@ -1,0 +1,23 @@
+[
+  {
+    "check": "s82",
+    "command": [
+      "F:\\exercise\\2026\\kamaclaude - v1\\KamaClaude\\.venv\\Scripts\\python.exe",
+      "-m",
+      "pytest",
+      "tests/unit/test_s82_store.py",
+      "tests/unit/test_s82_legacy.py",
+      "tests/unit/test_s82_execution.py",
+      "tests/unit/test_s82_session.py",
+      "tests/unit/test_session_store.py",
+      "tests/unit/test_session_manager.py",
+      "tests/unit/test_runner.py",
+      "-v",
+      "--tb=short",
+      "--basetemp",
+      "C:\\Users\\moxi\\AppData\\Local\\Temp\\kama-s8-s82-y73vas43\\pytest"
+    ],
+    "exit_code": 1,
+    "seconds": 3.312
+  }
+]

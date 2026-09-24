@@ -1,0 +1,20 @@
+{"check": "s84", "command": ["F:\\exercise\\2026\\kamaclaude - v1\\KamaClaude\\.venv\\Scripts\\python.exe", "-m", "pytest", "tests/unit/test_s84_compaction.py", "tests/integration/test_s84_compaction.py", "-v", "--tb=short", "--basetemp", "C:\\Users\\moxi\\AppData\\Local\\Temp\\kama-s8-s84-zx5omldd\\pytest"], "exit_code": 0, "seconds": 9.407}
+============================= test session starts =============================
+platform win32 -- Python 3.12.14, pytest-9.1.1, pluggy-1.6.0 -- F:\exercise\2026\kamaclaude - v1\KamaClaude\.venv\Scripts\python.exe
+cachedir: .pytest_cache
+rootdir: F:\exercise\2026\kamaclaude - v1\KamaClaude
+configfile: pyproject.toml
+asyncio: mode=Mode.AUTO, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collecting ... collected 9 items
+
+tests/unit/test_s84_compaction.py::test_v2_migration_adds_summary_table PASSED [ 11%]
+tests/unit/test_s84_compaction.py::test_persisted_summary_reopens_with_uncovered_tail PASSED [ 22%]
+tests/unit/test_s84_compaction.py::test_summary_insert_fault_rolls_back_pointer PASSED [ 33%]
+tests/unit/test_s84_compaction.py::test_checkpoint_switch_fault_rolls_back_summary PASSED [ 44%]
+tests/unit/test_s84_compaction.py::test_concurrent_messages_remain_after_snapshot PASSED [ 55%]
+tests/unit/test_s84_compaction.py::test_auto_compaction_continues_and_preserves_f04 PASSED [ 66%]
+tests/unit/test_s84_compaction.py::test_manual_compaction_is_inherited_by_next_run PASSED [ 77%]
+tests/unit/test_s84_compaction.py::test_generation_failure_preserves_effective_state PASSED [ 88%]
+tests/integration/test_s84_compaction.py::test_daemon_restart_reuses_persisted_manual_summary PASSED [100%]
+
+============================== 9 passed in 8.58s ==============================

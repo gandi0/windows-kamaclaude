@@ -70,10 +70,18 @@ class _FakeSessions:
     def __init__(self, *_args: Any, **_kwargs: Any) -> None:
         return
 
+    # 接受 daemon 生命周期清理请求而不创建后台任务
+    async def shutdown(self) -> None:
+        return
+
 
 class _FakePermission:
     # 接受权限配置但不读写用户策略
     def __init__(self, *_args: Any, **_kwargs: Any) -> None:
+        return
+
+    # 接受新的 daemon 生命周期但不保留任何审批
+    def begin_epoch(self, _epoch: str) -> None:
         return
 
 
@@ -82,7 +90,7 @@ def _config() -> Any:
     return SimpleNamespace(
         host="127.0.0.1",
         port=0,
-        llm=SimpleNamespace(default_model="fake-model"),
+        llm=SimpleNamespace(default_model="fake-model", base_url=""),
         mcp=SimpleNamespace(servers=[]),
         trace=SimpleNamespace(enabled=True, file="unused-trace.jsonl"),
         permission=SimpleNamespace(timeout_s=1.0),
@@ -112,6 +120,7 @@ def _patch_startup(monkeypatch: pytest.MonkeyPatch) -> tuple[list[_FakeServer], 
     monkeypatch.setattr(app_module, "PermissionManager", _FakePermission)
     monkeypatch.setattr(app_module, "load_policy_file", lambda _path: {})
     monkeypatch.setattr(app_module, "IpcEventBroadcaster", lambda **_kwargs: Mock(handle=Mock()))
+    monkeypatch.setattr(app_module, "DaemonLock", Mock())
     monkeypatch.setattr(app_module, "SessionStore", Mock())
     monkeypatch.setattr(app_module, "SessionManager", _FakeSessions)
     monkeypatch.setattr(app_module, "AgentRunner", Mock())
@@ -130,13 +139,15 @@ async def _wait_for_server(servers: list[_FakeServer]) -> _FakeServer:
     return servers[0]
 
 
-# 功能：验证 Windows 不支持信号注册时仍能完成 daemon 启动并进入等待状态
-# 设计：让两个注册调用都抛 NotImplementedError，再取消主任务并检查 finally 清理，覆盖 Windows 事件循环路径
+# 功能：验证 Windows 不支持 loop 信号注册时仍能启动，并在取消后恢复信号处理器
+# 设计：将 loop 注册设为不可用，断言 Windows 桥接不调用它，并保留原有资源清理断言
 @pytest.mark.asyncio
 async def test_run_works_without_signal_handlers(monkeypatch: pytest.MonkeyPatch) -> None:
     servers, traces = _patch_startup(monkeypatch)
     loop = asyncio.get_running_loop()
     registrations: list[signal.Signals] = []
+    previous = {sig: signal.getsignal(sig) for sig in (signal.SIGINT, signal.SIGTERM)}
+    monkeypatch.setattr(app_module, "sys", SimpleNamespace(platform="win32"))
 
     # 模拟不支持信号处理器的 Windows 事件循环
     def unsupported(sig: signal.Signals, _callback: Any) -> None:
@@ -153,36 +164,54 @@ async def test_run_works_without_signal_handlers(monkeypatch: pytest.MonkeyPatch
     with pytest.raises(asyncio.CancelledError):
         await main_task
 
-    assert registrations == [signal.SIGINT, signal.SIGTERM]
+    assert registrations == []
+    assert {sig: signal.getsignal(sig) for sig in previous} == previous
     assert server.stopped
     assert traces[0].started
     assert traces[0].stopped
 
 
-# 功能：验证 Unix 信号回调能触发正常退出并执行资源清理
-# 设计：保存 SIGINT/SIGTERM 回调后分别主动调用，直接覆盖 signal handler 与 shutdown Event 的连接
+# 功能：验证 Windows 和 Unix 信号回调都能触发退出、清理及处理器恢复
+# 设计：分别捕获两种注册接口的 SIGINT/SIGTERM 回调，主动触发且保留既有清理断言
 @pytest.mark.asyncio
 @pytest.mark.parametrize("shutdown_signal", [signal.SIGINT, signal.SIGTERM])
+@pytest.mark.parametrize("platform", ["win32", "linux"])
 async def test_run_exits_from_signal_callback(
-    monkeypatch: pytest.MonkeyPatch, shutdown_signal: signal.Signals
+    monkeypatch: pytest.MonkeyPatch, shutdown_signal: signal.Signals, platform: str,
 ) -> None:
     servers, traces = _patch_startup(monkeypatch)
     loop = asyncio.get_running_loop()
     callbacks: dict[signal.Signals, Any] = {}
+    previous = {sig: signal.getsignal(sig) for sig in (signal.SIGINT, signal.SIGTERM)}
+    windows_handlers: dict[signal.Signals, Any] = {}
+    monkeypatch.setattr(app_module, "sys", SimpleNamespace(platform=platform))
 
     # 保存 Unix 信号回调供测试主动触发
     def register(sig: signal.Signals, callback: Any) -> None:
         callbacks[sig] = callback
 
+    # 捕获 Windows 注册及清理时的处理器恢复，不修改真实进程信号状态
+    def register_windows(sig: signal.Signals, callback: Any) -> Any:
+        windows_handlers[sig] = callback
+        return previous[sig]
+
     monkeypatch.setattr(loop, "add_signal_handler", register)
+    monkeypatch.setattr(loop, "remove_signal_handler", lambda _sig: True)
+    monkeypatch.setattr(signal, "signal", register_windows)
     core = app_module.CoreApp()
     main_task = asyncio.create_task(core.run())
     server = await asyncio.wait_for(_wait_for_server(servers), timeout=1)
     await asyncio.wait_for(server.started.wait(), timeout=1)
-    callbacks[shutdown_signal]()
+    if platform == "win32":
+        assert set(windows_handlers) == {signal.SIGINT, signal.SIGTERM}
+        assert callbacks == {}
+        windows_handlers[shutdown_signal](shutdown_signal, None)
+    else:
+        assert set(callbacks) == {signal.SIGINT, signal.SIGTERM}
+        callbacks[shutdown_signal]()
     await asyncio.wait_for(main_task, timeout=1)
 
-    assert set(callbacks) == {signal.SIGINT, signal.SIGTERM}
+    assert windows_handlers == previous
     assert server.stopped
     assert traces[0].stopped
 

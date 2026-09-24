@@ -1,0 +1,10 @@
+{"ts": 1790213070.419116, "operation": "daemon.start", "pid": 19100, "scenario": "committed-result", "host": "127.0.0.1", "port": 58555, "generation": 1}
+{"ts": 1790213074.0118368, "pid": 27700, "operation": "rpc.request", "client": "readiness", "host": "127.0.0.1", "port": 58555, "request_id": "readiness-6f2065d5f27f47639ec0b231991727f5", "method": "core.ping", "params": {"client": "s83-test"}}
+{"ts": 1790213074.0131607, "pid": 27700, "operation": "rpc.response", "client": "readiness", "host": "127.0.0.1", "port": 58555, "request_id": "readiness-6f2065d5f27f47639ec0b231991727f5", "method": "core.ping", "result": {"server_version": "0.0.1", "uptime_ms": 2266, "received_at": "2026-09-24T01:24:34.013160+00:00"}}
+{"ts": 1790213074.014377, "pid": 27700, "operation": "rpc.request", "client": "owner", "host": "127.0.0.1", "port": 58555, "request_id": "owner-ad35315bdf244bf0a99012105f92c586", "method": "event.subscribe", "params": {"topics": ["permission.*", "run.*", "tool.*", "subagent.*"], "scope": "global"}}
+{"ts": 1790213074.014377, "pid": 27700, "operation": "rpc.response", "client": "owner", "host": "127.0.0.1", "port": 58555, "request_id": "owner-ad35315bdf244bf0a99012105f92c586", "method": "event.subscribe", "result": {"subscription_id": "sub-0e99bc5f", "replayed_count": 0}}
+{"ts": 1790213074.0245614, "operation": "daemon.start", "pid": 29096, "scenario": "committed-result", "host": "127.0.0.1", "port": 49678, "generation": 1}
+{"ts": 1790213076.0882292, "pid": 27700, "operation": "rpc.request", "client": "owner", "host": "127.0.0.1", "port": 58555, "request_id": "owner-229ab59dcb074224a88849956aa56d58", "method": "core.ping", "params": {"client": "owner-check"}}
+{"ts": 1790213076.0892348, "pid": 27700, "operation": "rpc.response", "client": "owner", "host": "127.0.0.1", "port": 58555, "request_id": "owner-229ab59dcb074224a88849956aa56d58", "method": "core.ping", "result": {"server_version": "0.0.1", "uptime_ms": 4344, "received_at": "2026-09-24T01:24:36.089235+00:00"}}
+{"ts": 1790213076.0904777, "operation": "daemon.stop", "pid": 29096, "exitcode": 1}
+{"ts": 1790213076.0937402, "operation": "daemon.stop", "pid": 19100, "exitcode": 1}

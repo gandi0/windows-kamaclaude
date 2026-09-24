@@ -6,9 +6,12 @@ import fnmatch
 import json
 import logging
 import signal
+import sys
 import time
+import uuid
 from datetime import UTC
 from pathlib import Path
+from types import FrameType
 from typing import Any
 
 from pydantic import BaseModel
@@ -30,13 +33,20 @@ from kama_claude.core.bus.commands import (
     SessionCreateResult,
     SessionGetHistoryCommand,
     SessionGetHistoryResult,
+    SessionListResult,
+    SessionResumeCommand,
+    SessionResumeResult,
+    SessionReviewCommand,
     SessionSendMessageCommand,
     SessionSendMessageResult,
+    SessionStatusCommand,
+    SessionStatusResult,
 )
 from kama_claude.core.bus.envelope import EventPushEnvelope
 from kama_claude.core.config import KamaConfig, get_config
 from kama_claude.core.events.bus import EventBus
-from kama_claude.core.llm.provider import AnthropicProvider
+from kama_claude.core.llm.base import LLMProvider
+from kama_claude.core.llm.lazy import LazyAnthropicProvider
 from kama_claude.core.logging_setup import setup_logging
 from kama_claude.core.mcp.server import McpServerManager
 from kama_claude.core.permissions.manager import PermissionManager
@@ -44,6 +54,8 @@ from kama_claude.core.permissions.storage import load_policy_file
 from kama_claude.core.runner import AgentRunner
 from kama_claude.core.runs import events_file, new_run_id
 from kama_claude.core.session import SessionManager, SessionStore
+from kama_claude.core.session.daemon_lock import DaemonLock
+from kama_claude.core.subagent.registry import BackgroundTaskRegistry
 from kama_claude.core.trace.record import TraceRecord
 from kama_claude.core.trace.writer import TraceWriter
 from kama_claude.core.transport.ipc_broadcaster import IpcEventBroadcaster
@@ -57,7 +69,11 @@ def _now() -> str:
 
 
 class CoreApp:
-    def __init__(self) -> None:
+    # 初始化 daemon，可注入本地测试依赖而无需生产故障开关
+    def __init__(
+        self, *, config: KamaConfig | None = None, provider: LLMProvider | None = None,
+        sessions_root: Path | None = None, permission_manager: PermissionManager | None = None,
+    ) -> None:
         self._start_time = time.monotonic()
         self._bus = EventBus()
         self._broadcaster: IpcEventBroadcaster | None = None
@@ -67,6 +83,14 @@ class CoreApp:
         self._sessions: SessionManager | None = None
         self._permission_manager: PermissionManager | None = None
         self._mcp_manager: McpServerManager | None = None
+        self._injected_config = config
+        self._provider = provider
+        self._sessions_root = sessions_root
+        self._injected_permissions = permission_manager
+        self._epoch = uuid.uuid4().hex
+        self._task_registry = BackgroundTaskRegistry()
+        self._store: SessionStore | None = None
+        self._server: SocketServer | None = None
 
     # 处理 core.ping 请求，返回服务版本、运行时长和接收时间
     async def _ping_handler(self, params: dict[str, Any]) -> PongResult:
@@ -110,15 +134,46 @@ class CoreApp:
     async def _session_create_handler(self, params: dict[str, Any]) -> SessionCreateResult:
         assert self._sessions is not None
         cmd = SessionCreateCommand.model_validate(params)
-        session = await self._sessions.create(mode=cmd.mode, title=cmd.title)
+        session = await self._sessions.create(
+            mode=cmd.mode, title=cmd.title, workspace=cmd.workspace,
+        )
         return SessionCreateResult(session_id=session.id, status=session.status)
 
-    # 向 session 发送一条用户消息并同步等待对应 run 完成
+    # 持久接受业务消息后立即返回任务身份，执行不依赖客户端连接
     async def _session_send_handler(self, params: dict[str, Any]) -> SessionSendMessageResult:
         assert self._sessions is not None
         cmd = SessionSendMessageCommand.model_validate(params)
-        run_id = await self._sessions.send_message(cmd.session_id, cmd.content)
+        run_id = await self._sessions.submit_message(
+            cmd.session_id, cmd.content, request_id=cmd.request_id,
+        )
         return SessionSendMessageResult(run_id=run_id)
+
+    # 列出已持久化会话及当前主任务状态
+    async def _session_list_handler(self, params: dict[str, Any]) -> SessionListResult:
+        assert self._sessions is not None
+        return SessionListResult(sessions=self._sessions.list_sessions())
+
+    # 返回恢复所需的完整事实与核查记录
+    async def _session_status_handler(self, params: dict[str, Any]) -> SessionStatusResult:
+        assert self._sessions is not None
+        cmd = SessionStatusCommand.model_validate(params)
+        return SessionStatusResult(**self._sessions.status(cmd.session_id))
+
+    # 认领中断任务并异步继续，重复请求返回同一任务状态
+    async def _session_resume_handler(self, params: dict[str, Any]) -> SessionResumeResult:
+        assert self._sessions is not None
+        cmd = SessionResumeCommand.model_validate(params)
+        return SessionResumeResult(**await self._sessions.resume(
+            cmd.session_id, cmd.run_id, cmd.workspace,
+        ))
+
+    # 保存用户对未知执行的明确处理选择
+    async def _session_review_handler(self, params: dict[str, Any]) -> SessionResumeResult:
+        assert self._sessions is not None
+        cmd = SessionReviewCommand.model_validate(params)
+        return SessionResumeResult(**await self._sessions.review(
+            cmd.session_id, cmd.run_id, cmd.action, cmd.note,
+        ))
 
     # 返回 session 的完整 Anthropic messages 历史
     async def _session_history_handler(self, params: dict[str, Any]) -> SessionGetHistoryResult:
@@ -137,8 +192,10 @@ class CoreApp:
         if self._permission_manager is None:
             logger.error("permission.respond: PermissionManager not initialized")
             return PermissionRespondResult()
-        self._permission_manager.respond(cmd.tool_use_id, cmd.decision)
-        return PermissionRespondResult()
+        accepted = self._permission_manager.respond(
+            cmd.tool_use_id, cmd.decision, cmd.approval_id,
+        )
+        return PermissionRespondResult(ok=accepted)
 
     # 手动压缩 session thread，将摘要持久化写入 thread.jsonl
     async def _session_compact_handler(self, params: dict[str, Any]) -> SessionCompactResult:
@@ -205,10 +262,37 @@ class CoreApp:
             await writer.drain()
         return count
 
-    # 启动守护进程：加载配置、初始化日志、启动 trace、启动 TCP 服务器，并等待退出信号
+    # 持有数据目录的系统锁覆盖整个生命周期，启动失败和取消时也完整释放资源
     async def run(self) -> None:
+        sessions_root = (self._sessions_root or Path("~/.kama/sessions")).expanduser().resolve()
+        lock = DaemonLock(sessions_root / "daemon.lock")
+        lock.acquire()
+        try:
+            await self._run(sessions_root)
+        finally:
+            try:
+                if self._server is not None:
+                    await self._server.stop()
+                for run_task in list(self._running_runs):
+                    run_task.cancel()
+                if self._running_runs:
+                    await asyncio.gather(*self._running_runs, return_exceptions=True)
+                if self._sessions is not None:
+                    await self._sessions.shutdown()
+                await self._task_registry.cancel_all()
+                if self._mcp_manager is not None:
+                    await self._mcp_manager.stop_all()
+                if self._store is not None:
+                    self._store.close()
+                if self._trace is not None:
+                    await self._trace.stop()
+            finally:
+                lock.close()
+
+    # 初始化配置、索引和协议处理器后监听本地端口
+    async def _run(self, sessions_root: Path) -> None:
         self._start_time = time.monotonic()
-        self._config = get_config()
+        self._config = self._injected_config or get_config()
         setup_logging(self._config)
 
         if self._config.trace.enabled:
@@ -218,10 +302,12 @@ class CoreApp:
             self._bus.subscribe(self._trace_event_handler)
 
         policy_file = Path("~/.kama/policy.toml").expanduser()
-        self._permission_manager = PermissionManager(
+        self._permission_manager = self._injected_permissions or PermissionManager(
             policy_file=policy_file,
             timeout_s=self._config.permission.timeout_s,
+            daemon_epoch=self._epoch,
         )
+        self._permission_manager.begin_epoch(self._epoch)
         logger.info(
             "permission manager: timeout_s=%.1f  persistent=%d entries",
             self._config.permission.timeout_s,
@@ -230,10 +316,14 @@ class CoreApp:
 
         self._broadcaster = IpcEventBroadcaster(trace=self._trace)
         self._bus.subscribe(self._broadcaster.handle)
-        sessions_root = Path("~/.kama/sessions").expanduser()
         store = SessionStore(sessions_root)
+        self._store = store
+        store.execution.start_daemon(self._epoch)
         assert self._config is not None
-        compact_provider = AnthropicProvider(self._config.llm.default_model)
+        compact_provider = self._provider or LazyAnthropicProvider(
+            self._config.llm.default_model,
+            base_url=self._config.llm.base_url or None,
+        )
 
         self._mcp_manager = McpServerManager()
         if self._config.mcp.servers:
@@ -248,9 +338,12 @@ class CoreApp:
                 trace=self._trace,
                 permission_manager=self._permission_manager,
                 mcp_manager=self._mcp_manager,
+                provider=self._provider,
+                task_registry=self._task_registry,
             ),
             bus=self._bus,
             provider=compact_provider,
+            epoch=self._epoch,
         )
 
         server = SocketServer(
@@ -259,6 +352,7 @@ class CoreApp:
             self._broadcaster,
             trace=self._trace,
         )
+        self._server = server
         server.register("core.ping", self._ping_handler)
         server.register("agent.run", self._agent_run_handler)
         server.register("event.subscribe", self._subscribe_handler)
@@ -268,6 +362,10 @@ class CoreApp:
         server.register("session.close", self._session_close_handler)
         server.register("permission.respond", self._permission_respond_handler)
         server.register("session.compact", self._session_compact_handler)
+        server.register("session.list", self._session_list_handler)
+        server.register("session.status", self._session_status_handler)
+        server.register("session.resume", self._session_resume_handler)
+        server.register("session.review", self._session_review_handler)
 
         addr = await server.start()
         logger.info("kama-core %s listening addr=%s", kama_claude.__version__, addr)
@@ -275,28 +373,25 @@ class CoreApp:
 
         loop = asyncio.get_running_loop()
         shutdown = asyncio.Event()
-        try:
-            try:
-                loop.add_signal_handler(signal.SIGINT, shutdown.set)
-            except NotImplementedError:
-                logger.debug("signal handlers are not supported by this event loop")
-            try:
-                loop.add_signal_handler(signal.SIGTERM, shutdown.set)
-            except NotImplementedError:
-                logger.debug("signal handlers are not supported by this event loop")
+        previous = {sig: signal.getsignal(sig) for sig in (signal.SIGINT, signal.SIGTERM)}
 
+        # Windows 主线程信号桥接到 asyncio，保留原生 Proactor 子进程支持
+        def request_shutdown(signum: int, frame: FrameType | None) -> None:
+            loop.call_soon_threadsafe(shutdown.set)
+
+        try:
+            for sig in previous:
+                if sys.platform == "win32":
+                    signal.signal(sig, request_shutdown)
+                else:
+                    loop.add_signal_handler(sig, shutdown.set)
             await shutdown.wait()
         finally:
+            for sig, handler in previous.items():
+                if sys.platform != "win32":
+                    loop.remove_signal_handler(sig)
+                signal.signal(sig, handler)
             logger.info("shutting down")
-            for run_task in list(self._running_runs):
-                run_task.cancel()
-            if self._running_runs:
-                await asyncio.gather(*self._running_runs, return_exceptions=True)
-            if self._mcp_manager is not None:
-                await self._mcp_manager.stop_all()
-            await server.stop()
-            if self._trace is not None:
-                await self._trace.stop()
 
 
 # 同步入口：启动 CoreApp 事件循环

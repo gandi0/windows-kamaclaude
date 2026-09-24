@@ -1,6 +1,4 @@
-# 行为规范
+﻿# Project Context
 
-## 创建文件准则
-
-需要创建文件时，所有的文件都需要在 ./workspace 下创建。
-
+- Tests live in tests/
+- Prefer focused unit tests.

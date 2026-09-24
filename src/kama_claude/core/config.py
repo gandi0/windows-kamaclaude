@@ -35,6 +35,7 @@ class AgentConfig:
 class LlmConfig:
     default_model: str = _DEFAULT_MODEL
     router: str = "static"  # "static" | "rule_based" (S4) | "cost_budget" (S6)
+    base_url: str = ""  # 兼容端点，留空则用 SDK 默认；例如阿里 DashScope: https://dashscope.aliyuncs.com/apps/anthropic
 
 
 @dataclass
@@ -90,7 +91,15 @@ def get_config() -> KamaConfig:
     config = KamaConfig()
 
     # .env 必须在读取 KAMA_CONFIG 之前加载，以便 .env 中的 KAMA_CONFIG 能影响 TOML 路径
-    load_dotenv(".env", override=False)
+    # 优先加载 CWD 的 .env（保持向后兼容）；若 CWD 没有 .env，再回退加载项目根的 .env
+    # （保证 daemon 无论从哪个 CWD 启动都能读到默认配置）
+    _PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent.parent
+    cwd_env = Path(".env")
+    project_env = _PROJECT_ROOT / ".env"
+    if cwd_env.exists():
+        load_dotenv(str(cwd_env), override=False)
+    elif project_env.exists():
+        load_dotenv(str(project_env), override=False)
 
     # 若显式指定 KAMA_CONFIG，只读该文件；否则按优先级叠加：全局 → 项目本地
     explicit = os.environ.get("KAMA_CONFIG")
@@ -170,7 +179,7 @@ def _apply_toml(config: KamaConfig, data: dict[str, Any]) -> None:
         llm = data["llm"]
         if not isinstance(llm, dict):
             raise SystemExit("Config error: [llm] must be a table")
-        unknown_llm: set[str] = set(llm.keys()) - {"default_model", "router"}
+        unknown_llm: set[str] = set(llm.keys()) - {"default_model", "router", "base_url"}
         if unknown_llm:
             raise SystemExit(f"Unknown [llm] keys: {', '.join(sorted(unknown_llm))}")
         if "default_model" in llm:
@@ -183,6 +192,11 @@ def _apply_toml(config: KamaConfig, data: dict[str, Any]) -> None:
             if not isinstance(val, str):
                 raise SystemExit("Config error: llm.router must be a string")
             config.llm.router = val
+        if "base_url" in llm:
+            val = llm["base_url"]
+            if not isinstance(val, str):
+                raise SystemExit("Config error: llm.base_url must be a string")
+            config.llm.base_url = val
 
     if "trace" in data:
         trace = data["trace"]
@@ -334,6 +348,10 @@ def _apply_env(config: KamaConfig) -> None:
     default_model = os.environ.get("KAMA_LLM_DEFAULT_MODEL")
     if default_model is not None:
         config.llm.default_model = default_model
+
+    base_url = os.environ.get("ANTHROPIC_BASE_URL")
+    if base_url is not None:
+        config.llm.base_url = base_url
 
     trace_enabled = os.environ.get("KAMA_TRACE_ENABLED")
     if trace_enabled is not None:

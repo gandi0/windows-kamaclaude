@@ -17,6 +17,8 @@ class ListDirParams(BaseModel):
 
 
 class ListDirTool(BaseTool):
+    effect = "read_only"
+    retry_safe = True
     params_model = ListDirParams
     name = "list_dir"
     description = (
@@ -49,7 +51,7 @@ class ListDirTool(BaseTool):
         if ".." in Path(path_str).parts:
             raise PermissionError(f"path traversal not allowed: {path_str}")
 
-        root = Path(path_str)
+        root = self.workspace / path_str
         if not root.exists():
             raise FileNotFoundError(f"no such directory: {path_str}")
         if not root.is_dir():

@@ -14,6 +14,7 @@ class CoreStartedEvent(BaseModel):
 class RunStartedEvent(BaseModel):
     type: Literal["run.started"] = "run.started"
     run_id: str
+    session_id: str | None = None
     goal: str
     ts: str  # ISO 8601
 
@@ -21,6 +22,7 @@ class RunStartedEvent(BaseModel):
 class RunFinishedEvent(BaseModel):
     type: Literal["run.finished"] = "run.finished"
     run_id: str
+    session_id: str | None = None
     status: str  # "success" | "failed"
     reason: str | None = None  # "exceeded_max_steps" | "cancelled" | "llm_error" | ...
     steps: int
@@ -47,6 +49,7 @@ class ToolCallStartedEvent(BaseModel):
     tool_use_id: str
     tool_name: str
     params: dict[str, Any]
+    call_id: str = ""
     ts: str
 
 
@@ -57,6 +60,11 @@ class ToolCallFinishedEvent(BaseModel):
     tool_name: str
     elapsed_ms: int
     output: str = ""  # tool result content, for TUI display
+    call_id: str = ""
+    attempt_id: str = ""
+    attempt: int = 1
+    outcome: Literal["known", "not_started", "unknown"] = "known"
+    cleanup_confirmed: bool | None = None
     ts: str
 
 
@@ -70,6 +78,10 @@ class ToolCallFailedEvent(BaseModel):
     error_message: str
     elapsed_ms: int
     attempt: int = 1  # 1=first attempt, 2=first retry, 3=second retry
+    call_id: str = ""
+    attempt_id: str = ""
+    outcome: Literal["known", "not_started", "unknown"] = "known"
+    cleanup_confirmed: bool | None = None
     ts: str
 
 
@@ -159,6 +171,8 @@ class PermissionRequestedEvent(BaseModel):
     param_preview: str
     session_id: str
     ts: str
+    approval_id: str | None = None
+    daemon_epoch: str | None = None
 
 
 class PermissionGrantedEvent(BaseModel):
@@ -168,6 +182,8 @@ class PermissionGrantedEvent(BaseModel):
     # "allow_once" | "always_allow" | "auto_allow"
     decision: str
     ts: str
+    approval_id: str | None = None
+    daemon_epoch: str | None = None
 
 
 class PermissionDeniedEvent(BaseModel):
@@ -177,6 +193,8 @@ class PermissionDeniedEvent(BaseModel):
     # "deny_once" | "always_deny" | "auto_deny"
     decision: str
     ts: str
+    approval_id: str | None = None
+    daemon_epoch: str | None = None
 
 
 class SubagentStartedEvent(BaseModel):

@@ -1,0 +1,23 @@
+[
+  {
+    "check": "s81",
+    "command": [
+      "F:\\wend\\ChatGPT\\kamaclaude优化\\KamaClaude\\.venv\\Scripts\\python.exe",
+      "-m",
+      "pytest",
+      "tests/unit/test_s81_execution.py",
+      "tests/unit/test_s81_process.py",
+      "tests/unit/test_tool_retry.py",
+      "tests/unit/test_invocation.py",
+      "tests/unit/test_loop.py",
+      "tests/unit/test_builtin_tools.py",
+      "tests/unit/test_permission_manager.py",
+      "tests/unit/test_tui_app.py",
+      "tests/unit/test_app.py",
+      "-v",
+      "--tb=short"
+    ],
+    "exit_code": 0,
+    "seconds": 10.778
+  }
+]

@@ -55,6 +55,7 @@ class _EchoTool(BaseTool):
 
 
 class _FailTool(BaseTool):
+    effect = "read_only"
     name = "fail"
     description = "Always raises"
     input_schema: dict[str, object] = {"type": "object", "properties": {}, "required": []}
@@ -156,7 +157,7 @@ async def test_tool_result_appended_to_context() -> None:
     assert block["content"] == "hello"
 
 
-# 功能：验证工具失败时 loop 不终止，而是将错误追加上下文让 LLM 重新决策
+# 功能：验证只读工具的已知失败被追加到上下文，让 LLM 重新决策
 # 设计：工具始终 raise + provider 第二步返回 end_turn，确认 loop 最终到达 success；这是 agent 区别于普通脚本的核心特性
 async def test_tool_failure_loop_continues_to_success() -> None:
     provider = _MockProvider([

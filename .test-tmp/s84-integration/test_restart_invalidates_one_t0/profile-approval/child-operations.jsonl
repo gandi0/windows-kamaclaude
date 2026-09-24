@@ -1,0 +1,5 @@
+{"ts": 1790213034.6189103, "pid": 26888, "operation": "daemon.start", "scenario": "approval"}
+{"ts": 1790213036.8002884, "pid": 26888, "operation": "provider.chat", "count": 1, "run_id": "20260924-012356-5f4194", "step": 1}
+{"ts": 1790213036.8114023, "pid": 26888, "operation": "barrier.reached", "name": "before-start-attempt"}
+{"ts": 1790213038.162241, "pid": 19128, "operation": "daemon.start", "scenario": "approval"}
+{"ts": 1790213040.8856306, "pid": 19128, "operation": "provider.chat", "count": 2, "run_id": "20260924-012356-5f4194", "step": 2}

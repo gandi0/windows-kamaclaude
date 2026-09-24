@@ -1,0 +1,5 @@
+{"check": "mypy", "command": ["F:\\exercise\\2026\\kamaclaude - v1\\KamaClaude\\.venv\\Scripts\\python.exe", "-m", "mypy", "src"], "exit_code": 1, "seconds": 12.14}
+src\kama_claude\core\session\execution.py:721: error: Incompatible types in assignment (expression has type "dict[str, Any] | None", variable has type "dict[str, Any]")  [assignment]
+src\kama_claude\core\session\store.py:136: error: Returning Any from function declared to return "dict[str, Any]"  [no-any-return]
+src\kama_claude\core\session\store.py:136: error: "ExecutionStore" has no attribute "import_legacy"  [attr-defined]
+Found 3 errors in 2 files (checked 91 source files)

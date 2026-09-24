@@ -2,11 +2,22 @@ from __future__ import annotations
 
 import json
 
+from pydantic import BaseModel, ConfigDict, Field
+
 from kama_claude.core.task.manager import TaskManager
 from kama_claude.core.tools.base import BaseTool, ToolResult
 
 
+class TaskCreateParams(BaseModel):
+    model_config = ConfigDict(strict=True)
+    subject: str
+    description: str = ""
+    blocked_by: list[int] = Field(default_factory=list)
+
+
 class TaskCreateTool(BaseTool):
+    params_model = TaskCreateParams
+    effect = "write"
     name = "task_create"
     description = (
         "Create a new task to track a unit of work. "
@@ -39,12 +50,9 @@ class TaskCreateTool(BaseTool):
 
     # 创建任务并返回 JSON 字符串
     async def invoke(self, params: dict[str, object]) -> ToolResult:
-        subject = str(params["subject"])
-        description = str(params.get("description") or "")
-        raw_blocked: list[object] = list(params.get("blocked_by") or [])  # type: ignore[call-overload]
-        blocked_by = [int(str(x)) for x in raw_blocked]
+        p = TaskCreateParams.model_validate(params)
         try:
-            task = self._manager.create(subject, description, blocked_by)
+            task = self._manager.create(p.subject, p.description, p.blocked_by)
             return ToolResult(content=json.dumps(task.to_dict(), ensure_ascii=False))
         except ValueError as exc:
             return ToolResult(content=str(exc), is_error=True, error_type="runtime_error")

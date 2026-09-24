@@ -1,0 +1,14 @@
+{"type":"run.started","run_id":"20260924-012244-ab7b1c","session_id":null,"goal":"test goal","ts":"2026-09-24T01:22:44.543479+00:00"}
+{"type":"step.started","run_id":"20260924-012244-ab7b1c","step":1,"ts":"2026-09-24T01:22:44.544551+00:00"}
+{"type":"tool.call_started","run_id":"20260924-012244-ab7b1c","tool_use_id":"t1","tool_name":"unknown_tool","params":{},"call_id":"ba21b59b9ab648b2a4536542041566ec","ts":"2026-09-24T01:22:44.546857+00:00"}
+{"type":"tool.call_failed","run_id":"20260924-012244-ab7b1c","tool_use_id":"t1","tool_name":"unknown_tool","error_class":"runtime_error","error_message":"unknown tool: unknown_tool","elapsed_ms":0,"attempt":0,"call_id":"ba21b59b9ab648b2a4536542041566ec","attempt_id":"","outcome":"not_started","cleanup_confirmed":null,"ts":"2026-09-24T01:22:44.548382+00:00"}
+{"type":"step.finished","run_id":"20260924-012244-ab7b1c","step":1,"ts":"2026-09-24T01:22:44.548382+00:00"}
+{"type":"step.started","run_id":"20260924-012244-ab7b1c","step":2,"ts":"2026-09-24T01:22:44.548382+00:00"}
+{"type":"tool.call_started","run_id":"20260924-012244-ab7b1c","tool_use_id":"t2","tool_name":"unknown_tool","params":{},"call_id":"f1cabfc55b5042d78c531c81c016e3da","ts":"2026-09-24T01:22:44.550887+00:00"}
+{"type":"tool.call_failed","run_id":"20260924-012244-ab7b1c","tool_use_id":"t2","tool_name":"unknown_tool","error_class":"runtime_error","error_message":"unknown tool: unknown_tool","elapsed_ms":0,"attempt":0,"call_id":"f1cabfc55b5042d78c531c81c016e3da","attempt_id":"","outcome":"not_started","cleanup_confirmed":null,"ts":"2026-09-24T01:22:44.552199+00:00"}
+{"type":"step.finished","run_id":"20260924-012244-ab7b1c","step":2,"ts":"2026-09-24T01:22:44.552199+00:00"}
+{"type":"step.started","run_id":"20260924-012244-ab7b1c","step":3,"ts":"2026-09-24T01:22:44.552199+00:00"}
+{"type":"tool.call_started","run_id":"20260924-012244-ab7b1c","tool_use_id":"t3","tool_name":"unknown_tool","params":{},"call_id":"865de6fba4c043819566ec1bda8fa7a4","ts":"2026-09-24T01:22:44.554871+00:00"}
+{"type":"tool.call_failed","run_id":"20260924-012244-ab7b1c","tool_use_id":"t3","tool_name":"unknown_tool","error_class":"runtime_error","error_message":"unknown tool: unknown_tool","elapsed_ms":0,"attempt":0,"call_id":"865de6fba4c043819566ec1bda8fa7a4","attempt_id":"","outcome":"not_started","cleanup_confirmed":null,"ts":"2026-09-24T01:22:44.556785+00:00"}
+{"type":"step.finished","run_id":"20260924-012244-ab7b1c","step":3,"ts":"2026-09-24T01:22:44.556785+00:00"}
+{"type":"run.finished","run_id":"20260924-012244-ab7b1c","session_id":null,"status":"failed","reason":"exceeded_max_steps","steps":3,"ts":"2026-09-24T01:22:44.558291+00:00"}

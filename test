@@ -1,0 +1,6 @@
+mkdir -p .kama
+cat > .kama/context.md <<'EOF'
+# Project Context
+- Tests live in KamaClaude/tests/
+- Prefer focused unit tests.
+EOF

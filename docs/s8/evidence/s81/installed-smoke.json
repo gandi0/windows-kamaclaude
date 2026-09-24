@@ -1,0 +1,15 @@
+{
+  "python": "3.13.0 (tags/v3.13.0:60403a5, Oct  7 2024, 09:38:07) [MSC v.1941 64 bit (AMD64)]",
+  "package": "0.0.1",
+  "requires_python": "<3.14,>=3.12",
+  "import_without_pythonpath_from_temp_cwd": {
+    "exit_code": 0,
+    "output": "F:\\wend\\ChatGPT\\kamaclaude优化\\KamaClaude\\src\\kama_claude\\core\\tools\\process.py",
+    "stderr": ""
+  },
+  "installed_cli_version": {
+    "exit_code": 0,
+    "output": "0.0.1",
+    "stderr": ""
+  }
+}

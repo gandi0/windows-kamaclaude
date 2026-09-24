@@ -1,0 +1,19 @@
+[
+  {
+    "check": "daemon-other",
+    "command": [
+      "F:\\exercise\\2026\\kamaclaude - v1\\KamaClaude\\.venv\\Scripts\\python.exe",
+      "-m",
+      "pytest",
+      "tests/integration/test_s83_recovery.py",
+      "-k",
+      "not reuses_committed and not invalidates_one_time",
+      "-v",
+      "--tb=short",
+      "--basetemp",
+      "C:\\Users\\moxi\\AppData\\Local\\Temp\\kama-s8-daemon-other-wf2qgi8k\\pytest"
+    ],
+    "exit_code": 1,
+    "seconds": 71.828
+  }
+]

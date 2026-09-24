@@ -1,0 +1,7 @@
+{"ts": 1790213178.5447729, "pid": 5860, "operation": "daemon.start", "scenario": "s84-compaction"}
+{"ts": 1790213180.8966293, "pid": 5860, "operation": "provider.chat", "count": 1, "run_id": "20260924-012620-7d1f67", "step": 1}
+{"ts": 1790213180.8966293, "pid": 5860, "operation": "s84.context", "run_id": "20260924-012620-7d1f67", "summary_seen": false, "original_seen": false, "message_count": 1}
+{"ts": 1790213180.9036155, "pid": 5860, "operation": "provider.chat", "count": 2, "run_id": "compact", "step": 0}
+{"ts": 1790213182.2327933, "pid": 22464, "operation": "daemon.start", "scenario": "s84-compaction"}
+{"ts": 1790213184.546344, "pid": 22464, "operation": "provider.chat", "count": 3, "run_id": "20260924-012624-b92dac", "step": 1}
+{"ts": 1790213184.546344, "pid": 22464, "operation": "s84.context", "run_id": "20260924-012624-b92dac", "summary_seen": true, "original_seen": false, "message_count": 3}

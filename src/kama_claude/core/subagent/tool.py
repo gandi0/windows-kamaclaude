@@ -29,6 +29,7 @@ from kama_claude.core.tools.registry import ToolRegistry
 if TYPE_CHECKING:
     from kama_claude.core.llm.base import LLMProvider
     from kama_claude.core.permissions.manager import PermissionManager
+    from kama_claude.core.session.execution import ExecutionStore
 
 _profile_loader = AgentProfileLoader()
 
@@ -93,6 +94,8 @@ class SpawnAgentTool(BaseTool):
         runs_dir: Path,
         session_id: str,
         depth: int = 0,
+        execution_store: ExecutionStore | None = None,
+        workspace: Path | None = None,
     ) -> None:
         self._provider = provider
         self._parent_bus = parent_bus
@@ -103,6 +106,8 @@ class SpawnAgentTool(BaseTool):
         self._runs_dir = runs_dir
         self._session_id = session_id
         self._depth = depth
+        self._execution_store = execution_store
+        self._workspace = workspace or Path.cwd().resolve()
 
     # 派生子 agent，前台时阻塞直到完成并返回结果，后台时立即返回 run_id
     async def invoke(self, params: dict[str, object]) -> ToolResult:
@@ -120,6 +125,10 @@ class SpawnAgentTool(BaseTool):
             profile = _profile_loader.load(p.subagent_type)
 
         child_run_id = new_run_id()
+        if self._execution_store is not None:
+            self._execution_store.create_child(
+                self._parent_run_id, child_run_id, p.prompt, p.subagent_type, p.run_in_background,
+            )
         child_context = ExecutionContext(
             run_id=child_run_id,
             goal=p.prompt,
@@ -170,17 +179,8 @@ class SpawnAgentTool(BaseTool):
                 )
             )
 
-        async with EventWriter(child_run_path / "events.jsonl") as writer:
-            writer.subscribe(child_bus)
-            await child_loop.run(child_context)
-
-        await self._parent_bus.publish(
-            SubagentFinishedEvent(
-                run_id=child_run_id,
-                parent_run_id=self._parent_run_id,
-                status=child_context.status,
-                ts=_now(),
-            )
+        await self._run_background(
+            child_loop, child_context, child_bus, child_run_path, child_run_id,
         )
 
         if child_context.status == "success":
@@ -205,9 +205,22 @@ class SpawnAgentTool(BaseTool):
         run_path: Path,
         run_id: str,
     ) -> None:
-        async with EventWriter(run_path / "events.jsonl") as writer:
-            writer.subscribe(bus)
-            await loop.run(context)
+        try:
+            async with EventWriter(run_path / "events.jsonl") as writer:
+                writer.subscribe(bus)
+                await loop.run(context)
+        except asyncio.CancelledError:
+            context.status, context.reason = "needs_review", "child_cancelled_effects_unverified"
+            raise
+        except Exception:
+            context.status, context.reason = "needs_review", "child_failed_effects_unverified"
+            raise
+        finally:
+            if self._execution_store is not None:
+                self._execution_store.finish_child(
+                    run_id, "succeeded" if context.status == "success" else context.status,
+                    context.result, context.reason,
+                )
         await self._parent_bus.publish(
             SubagentFinishedEvent(
                 run_id=run_id,
@@ -235,10 +248,10 @@ class SpawnAgentTool(BaseTool):
 
         registry = ToolRegistry()
         _all_tools = [
-            ReadFileTool(),
-            BashTool(),
-            WriteFileTool(),
-            ListDirTool(),
+            ReadFileTool(self._workspace),
+            BashTool(self._workspace),
+            WriteFileTool(self._workspace),
+            ListDirTool(self._workspace),
         ]
         for t in _all_tools:
             if _allowed(t.name):
@@ -265,11 +278,15 @@ class SpawnAgentTool(BaseTool):
                 runs_dir=self._runs_dir,
                 session_id=self._session_id,
                 depth=self._depth + 1,
+                execution_store=self._execution_store,
+                workspace=self._workspace,
             )
             if _allowed("spawn_agent"):
                 registry.register(nested)
             if _allowed("agent_result"):
-                registry.register(AgentResultTool(self._task_registry))
+                registry.register(AgentResultTool(
+                    self._task_registry, self._execution_store, session_id=self._session_id,
+                ))
 
         return registry
 
@@ -298,12 +315,34 @@ class AgentResultTool(BaseTool):
     params_model = AgentResultParams
 
     # 初始化，持有共享的后台任务注册表
-    def __init__(self, task_registry: BackgroundTaskRegistry) -> None:
+    def __init__(
+        self, task_registry: BackgroundTaskRegistry,
+        execution_store: ExecutionStore | None = None, *, session_id: str = "",
+    ) -> None:
         self._task_registry = task_registry
+        self._execution_store = execution_store
+        self._session_id = session_id
 
     # 查询指定 run_id 的后台任务状态，返回结果或错误
     async def invoke(self, params: dict[str, object]) -> ToolResult:
         p = AgentResultParams.model_validate(params)
+        if self._execution_store is not None:
+            run = self._execution_store.get_run(p.run_id)
+            if (run is not None and run.get("parent_run_id")
+                    and run["session_id"] == self._session_id):
+                if run["status"] == "succeeded":
+                    return ToolResult(content=run.get("result") or "Subagent completed.")
+                if run["status"] == "running":
+                    return ToolResult(content="still running")
+                return ToolResult(
+                    content=f"Subagent {run['status']}: {run.get('reason')}. "
+                            "Automatic child recovery is disabled.",
+                    is_error=True, error_type="runtime_error",
+                )
+            return ToolResult(
+                content=f"Unknown run_id in this session: {p.run_id}",
+                is_error=True, error_type="runtime_error",
+            )
         entry = self._task_registry.get(p.run_id)
         if entry is None:
             return ToolResult(

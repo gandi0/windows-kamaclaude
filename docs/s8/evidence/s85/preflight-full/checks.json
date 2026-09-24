@@ -1,0 +1,70 @@
+[
+  {
+    "check": "ruff",
+    "command": [
+      "F:\\exercise\\2026\\kamaclaude - v1\\KamaClaude\\.venv\\Scripts\\python.exe",
+      "-m",
+      "ruff",
+      "check",
+      "src",
+      "tests",
+      "scripts"
+    ],
+    "exit_code": 1,
+    "seconds": 0.219
+  },
+  {
+    "check": "mypy",
+    "command": [
+      "F:\\exercise\\2026\\kamaclaude - v1\\KamaClaude\\.venv\\Scripts\\python.exe",
+      "-m",
+      "mypy",
+      "src"
+    ],
+    "exit_code": 0,
+    "seconds": 0.969
+  },
+  {
+    "check": "unit",
+    "command": [
+      "F:\\exercise\\2026\\kamaclaude - v1\\KamaClaude\\.venv\\Scripts\\python.exe",
+      "-m",
+      "pytest",
+      "tests/unit",
+      "-v",
+      "--tb=short",
+      "--basetemp",
+      "C:\\Users\\moxi\\AppData\\Local\\Temp\\kama-s8-unit-7zl2sdm6\\pytest"
+    ],
+    "exit_code": 0,
+    "seconds": 22.0
+  },
+  {
+    "check": "integration",
+    "command": [
+      "F:\\exercise\\2026\\kamaclaude - v1\\KamaClaude\\.venv\\Scripts\\python.exe",
+      "-m",
+      "pytest",
+      "tests/integration",
+      "-v",
+      "--tb=short",
+      "--ignore=tests/integration/test_run_e2e.py",
+      "-m",
+      "not integration",
+      "--basetemp",
+      "C:\\Users\\moxi\\AppData\\Local\\Temp\\kama-s8-integration-h60sxtn3\\pytest"
+    ],
+    "exit_code": 0,
+    "seconds": 113.391
+  },
+  {
+    "check": "protocol",
+    "command": [
+      "F:\\exercise\\2026\\kamaclaude - v1\\KamaClaude\\.venv\\Scripts\\python.exe",
+      "scripts/gen_protocol_doc.py",
+      "--check"
+    ],
+    "exit_code": 0,
+    "seconds": 0.531
+  }
+]

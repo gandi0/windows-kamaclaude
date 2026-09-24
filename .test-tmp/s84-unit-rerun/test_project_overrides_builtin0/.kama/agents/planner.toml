@@ -1,0 +1,5 @@
+[agent]
+description = "local planner"
+system_prompt = "local prompt"
+allowed_tools = ["list_dir"]
+model = ""

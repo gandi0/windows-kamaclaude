@@ -1,0 +1,6 @@
+[core]
+host = "127.0.0.1"
+port = 62162
+[logging]
+level = "WARNING"
+file = ""

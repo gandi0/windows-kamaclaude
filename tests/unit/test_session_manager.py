@@ -32,6 +32,7 @@ class _Runner:
             [{"role": "assistant", "content": [{"type": "text", "text": f"done {goal}"}]}],
             run_id,
         )
+        store.execution.finish_run(run_id, "succeeded")
         return RunOutcome(status="success", result="done", reason=None)
 
 

@@ -9,7 +9,7 @@ build-backend = "hatchling.build" # 使用 Hatchling 作为构建后端
 [project]
 name = "KamaClaude"
 version = "0.0.1"
-requires-python = ">=3.12,<3.13" # 仅支持 3.12 小版本范围，与 CI/类型检查一致
+requires-python = ">=3.12,<3.14" # S8 本地验证使用 Windows / Python 3.13；保留原 3.12 范围
 dependencies = [
     "pydantic>=2.0",       # 数据校验与序列化（含 JSON 模型等）
     "python-dotenv>=1.0",  # .env 文件解析

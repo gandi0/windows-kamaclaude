@@ -203,3 +203,16 @@ def test_unknown_event_silently_ignored() -> None:
 
     app._handle_event({"type": "some.unknown.type", "run_id": "r", "ts": "t"})
     assert appended == []
+
+
+# 功能：验证副作用未知的暂停状态在 TUI 显示为需要核查
+# 设计：直接投递真实 run.finished 状态，断言显示暂停而不是已完成或已知失败
+def test_run_needs_review_shows_uncertain_effects() -> None:
+    app = KamaTuiApp("127.0.0.1", 9999)
+    appended: list[Widget] = []
+    app._append = lambda widget: appended.append(widget)  # type: ignore[method-assign]
+    app._handle_event({"type": "run.finished", "run_id": "r", "status": "needs_review",
+                       "steps": 1, "reason": "tool_outcome_unknown", "ts": "t"})
+    rendered = appended[0].content
+    assert "needs review" in rendered and "unconfirmed" in rendered
+    assert "completed" not in rendered and "failed" not in rendered

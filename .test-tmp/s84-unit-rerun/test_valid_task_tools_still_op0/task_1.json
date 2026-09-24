@@ -1,0 +1,9 @@
+{
+  "id": 1,
+  "subject": "本地任务",
+  "description": "",
+  "status": "completed",
+  "blocked_by": [],
+  "created_at": "2026-09-24T01:22:45.462151+00:00",
+  "updated_at": "2026-09-24T01:22:45.463348+00:00"
+}

@@ -1,0 +1,10 @@
+{"type":"run.started","run_id":"20260924-012244-961486","session_id":null,"goal":"test goal","ts":"2026-09-24T01:22:44.358271+00:00"}
+{"type":"step.started","run_id":"20260924-012244-961486","step":1,"ts":"2026-09-24T01:22:44.359281+00:00"}
+{"type":"tool.call_started","run_id":"20260924-012244-961486","tool_use_id":"t1","tool_name":"unknown_tool","params":{},"call_id":"1a3e70da4c314ffaa9e51073ba27da74","ts":"2026-09-24T01:22:44.362888+00:00"}
+{"type":"tool.call_failed","run_id":"20260924-012244-961486","tool_use_id":"t1","tool_name":"unknown_tool","error_class":"runtime_error","error_message":"unknown tool: unknown_tool","elapsed_ms":0,"attempt":0,"call_id":"1a3e70da4c314ffaa9e51073ba27da74","attempt_id":"","outcome":"not_started","cleanup_confirmed":null,"ts":"2026-09-24T01:22:44.363998+00:00"}
+{"type":"step.finished","run_id":"20260924-012244-961486","step":1,"ts":"2026-09-24T01:22:44.363998+00:00"}
+{"type":"step.started","run_id":"20260924-012244-961486","step":2,"ts":"2026-09-24T01:22:44.363998+00:00"}
+{"type":"tool.call_started","run_id":"20260924-012244-961486","tool_use_id":"t2","tool_name":"unknown_tool","params":{},"call_id":"785c6657a26343c383d7118df78774e1","ts":"2026-09-24T01:22:44.366769+00:00"}
+{"type":"tool.call_failed","run_id":"20260924-012244-961486","tool_use_id":"t2","tool_name":"unknown_tool","error_class":"runtime_error","error_message":"unknown tool: unknown_tool","elapsed_ms":0,"attempt":0,"call_id":"785c6657a26343c383d7118df78774e1","attempt_id":"","outcome":"not_started","cleanup_confirmed":null,"ts":"2026-09-24T01:22:44.368778+00:00"}
+{"type":"step.finished","run_id":"20260924-012244-961486","step":2,"ts":"2026-09-24T01:22:44.368778+00:00"}
+{"type":"run.finished","run_id":"20260924-012244-961486","session_id":null,"status":"failed","reason":"exceeded_max_steps","steps":2,"ts":"2026-09-24T01:22:44.369322+00:00"}

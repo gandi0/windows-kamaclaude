@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from typing import Annotated, Any, Literal
 
-from pydantic import BaseModel, Discriminator
+from pydantic import BaseModel, Discriminator, Field
 
 from kama_claude.core.session.model import SessionMode, SessionStatus
 
@@ -43,6 +43,7 @@ class SessionCreateCommand(BaseModel):
     type: Literal["session.create"] = "session.create"
     mode: SessionMode = "chat"
     title: str = ""
+    workspace: str | None = None
 
 
 class SessionCreateResult(BaseModel):
@@ -54,6 +55,7 @@ class SessionSendMessageCommand(BaseModel):
     type: Literal["session.send_message"] = "session.send_message"
     session_id: str
     content: str
+    request_id: str | None = Field(default=None, min_length=1, max_length=200)
 
 
 class SessionSendMessageResult(BaseModel):
@@ -83,6 +85,7 @@ class PermissionRespondCommand(BaseModel):
     tool_use_id: str
     # "allow_once" | "always_allow" | "deny_once" | "always_deny"
     decision: str
+    approval_id: str | None = None
 
 
 class PermissionRespondResult(BaseModel):
@@ -98,6 +101,53 @@ class SessionCompactCommand(BaseModel):
 class SessionCompactResult(BaseModel):
     summary_tokens: int
     saved_tokens: int
+    summary_id: str
+    summary_version: int
+    summary_from: int
+    summary_to: int
+
+
+class SessionListCommand(BaseModel):
+    type: Literal["session.list"] = "session.list"
+
+
+class SessionListResult(BaseModel):
+    sessions: list[dict[str, Any]]
+
+
+class SessionStatusCommand(BaseModel):
+    type: Literal["session.status"] = "session.status"
+    session_id: str
+
+
+class SessionStatusResult(BaseModel):
+    session: dict[str, Any]
+    runs: list[dict[str, Any]]
+    calls: list[dict[str, Any]]
+    reviews: list[dict[str, Any]]
+    children: list[dict[str, Any]]
+
+
+class SessionResumeCommand(BaseModel):
+    type: Literal["session.resume"] = "session.resume"
+    session_id: str
+    run_id: str
+    workspace: str
+
+
+class SessionResumeResult(BaseModel):
+    run_id: str
+    status: str
+    started: bool = False
+    reason: str | None = None
+
+
+class SessionReviewCommand(BaseModel):
+    type: Literal["session.review"] = "session.review"
+    session_id: str
+    run_id: str
+    action: Literal["pause", "abandon"]
+    note: str = Field(min_length=1)
 
 
 # 根据 type 字段决定命令类型的判别联合
@@ -110,6 +160,10 @@ Command = Annotated[
     | SessionGetHistoryCommand
     | SessionCloseCommand
     | PermissionRespondCommand
-    | SessionCompactCommand,
+    | SessionCompactCommand
+    | SessionListCommand
+    | SessionStatusCommand
+    | SessionResumeCommand
+    | SessionReviewCommand,
     Discriminator("type"),
 ]

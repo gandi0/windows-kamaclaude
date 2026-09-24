@@ -1,0 +1,8 @@
+{
+  "reproduced": true,
+  "error": "NotImplementedError",
+  "boundary": "CoreApp.run -> loop.add_signal_handler",
+  "traceback": "Traceback (most recent call last):\n  File \"F:\\wend\\ChatGPT\\kamaclaude优化\\KamaClaude\\scripts\\s8\\probe_windows.py\", line 28, in probe\n    await asyncio.wait_for(CoreApp().run(), timeout=5)\n  File \"G:\\toolsr\\python3.13-exe\\Lib\\asyncio\\tasks.py\", line 507, in wait_for\n    return await fut\n           ^^^^^^^^^\n  File \"F:\\wend\\ChatGPT\\kamaclaude优化\\KamaClaude\\src\\kama_claude\\core\\app.py\", line 278, in run\n    loop.add_signal_handler(signal.SIGINT, shutdown.set)\n    ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"G:\\toolsr\\python3.13-exe\\Lib\\asyncio\\events.py\", line 596, in add_signal_handler\n    raise NotImplementedError\nNotImplementedError\n",
+  "provider": "constructor stub; chat never called",
+  "api_calls": 0
+}

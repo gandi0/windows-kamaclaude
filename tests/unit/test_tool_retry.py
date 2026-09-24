@@ -13,6 +13,8 @@ from kama_claude.core.tools.registry import ToolRegistry
 # --- stub tools --------------------------------------------------------------
 
 class _FailNTimes(BaseTool):
+    effect = "read_only"
+    retry_safe = True
     """Fails with runtime_error for the first n calls, then succeeds."""
     name = "fail_n"
     description = "Fails n times then succeeds"
@@ -25,11 +27,13 @@ class _FailNTimes(BaseTool):
     async def invoke(self, params: dict[str, object]) -> ToolResult:
         if self._remaining > 0:
             self._remaining -= 1
-            return ToolResult(content="transient error", is_error=True, error_type=self._error_type)
+            return ToolResult(content="transient error", is_error=True, error_type=self._error_type, transient=True)
         return ToolResult(content="ok")
 
 
 class _RateLimitedNTimes(BaseTool):
+    effect = "read_only"
+    retry_safe = True
     """Raises RateLimitedError for the first n calls, then succeeds."""
     name = "rate_n"
     description = "Rate-limits n times then succeeds"
@@ -46,6 +50,8 @@ class _RateLimitedNTimes(BaseTool):
 
 
 class _AlwaysFails(BaseTool):
+    effect = "read_only"
+    retry_safe = True
     name = "always_fail"
     description = "Always fails"
     input_schema: dict[str, object] = {"type": "object", "properties": {}, "required": []}
@@ -54,7 +60,7 @@ class _AlwaysFails(BaseTool):
         self._error_type = error_type
 
     async def invoke(self, params: dict[str, object]) -> ToolResult:
-        return ToolResult(content="permanent error", is_error=True, error_type=self._error_type)
+        return ToolResult(content="permanent error", is_error=True, error_type=self._error_type, transient=True)
 
 
 # --- helper ------------------------------------------------------------------
@@ -81,8 +87,8 @@ async def _run(tool: BaseTool, *, monkeypatch: pytest.MonkeyPatch) -> tuple[Tool
 # --- tests -------------------------------------------------------------------
 
 
-# 功能：验证 runtime_error 在首次失败后自动重试，最多 2 次，第 2 次成功时返回 ok
-# 设计：_FailNTimes(1) 第一次返回 runtime_error，第二次成功；monkeypatch 消除 sleep 延迟
+# 功能：验证声明安全的只读工具遇到明确暂时错误时有限重试并成功
+# 设计：stub 显式声明 read_only、retry_safe、transient，保留实际次数和事件断言
 async def test_runtime_error_retries_and_succeeds(monkeypatch: pytest.MonkeyPatch) -> None:
     result, events = await _run(_FailNTimes(1), monkeypatch=monkeypatch)
     assert not result.is_error
@@ -102,7 +108,7 @@ async def test_rate_limited_retries_and_succeeds(monkeypatch: pytest.MonkeyPatch
     assert failed_events[0].error_class == "rate_limited"  # type: ignore[attr-defined]
 
 
-# 功能：验证 runtime_error 超过 2 次重试后最终返回失败，attempt 字段递增
+# 功能：验证安全只读工具的暂时错误耗尽重试后失败，attempt 字段递增
 # 设计：_AlwaysFails 三次都失败；断言最终结果 is_error + 收到 3 个 failed 事件，attempt 为 1/2/3
 async def test_runtime_error_exhausts_retries(monkeypatch: pytest.MonkeyPatch) -> None:
     result, events = await _run(_AlwaysFails("runtime_error"), monkeypatch=monkeypatch)

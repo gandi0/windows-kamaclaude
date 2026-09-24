@@ -12,6 +12,7 @@ class NoteSaveParams(BaseModel):
 
 
 class NoteSaveTool(BaseTool):
+    effect = "write"
     params_model = NoteSaveParams
     name = "note_save"
     description = (

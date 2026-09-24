@@ -1,0 +1,4 @@
+{"role":"user","content":"hello"}
+{bad json
+{"role":"system","content":"keep"}
+{"role":"assistant","content":[{"type":"tool_use","id":"orphan","name":"x","input":{}}]}

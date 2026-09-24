@@ -1,0 +1,205 @@
+{"check": "integration", "command": ["F:\\wend\\ChatGPT\\kamaclaude优化\\KamaClaude\\.venv\\Scripts\\python.exe", "-m", "pytest", "tests/integration", "-v", "--tb=short", "--ignore=tests/integration/test_run_e2e.py", "-m", "not integration"], "exit_code": 1, "seconds": 31.632}
+============================= test session starts =============================
+platform win32 -- Python 3.13.0, pytest-9.1.1, pluggy-1.6.0 -- F:\wend\ChatGPT\kamaclaude优化\KamaClaude\.venv\Scripts\python.exe
+cachedir: .pytest_cache
+rootdir: F:\wend\ChatGPT\kamaclaude优化\KamaClaude
+configfile: pyproject.toml
+asyncio: mode=Mode.AUTO, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collecting ... collected 10 items
+
+tests/integration/test_ping_roundtrip.py::test_ping_returns_pong ERROR   [ 10%]
+tests/integration/test_ping_roundtrip.py::test_unknown_method_returns_error ERROR [ 20%]
+tests/integration/test_ping_roundtrip.py::test_invalid_json_returns_error ERROR [ 30%]
+tests/integration/test_s2_dual_process.py::test_agent_run_returns_run_id_and_emits_started ERROR [ 40%]
+tests/integration/test_s2_dual_process.py::test_two_clients_both_receive_broadcast ERROR [ 50%]
+tests/integration/test_s2_dual_process.py::test_disconnect_and_replay_from_run ERROR [ 60%]
+tests/integration/test_s4_session_ipc.py::test_session_create_history_close_over_ipc ERROR [ 70%]
+tests/integration/test_s5_permission_flow.py::test_permission_allow_once_tool_executes PASSED [ 80%]
+tests/integration/test_s5_permission_flow.py::test_permission_deny_once_tool_not_executed PASSED [ 90%]
+tests/integration/test_s5_permission_flow.py::test_always_allow_cached_within_session PASSED [100%]
+
+=================================== ERRORS ====================================
+__________________ ERROR at setup of test_ping_returns_pong ___________________
+.venv\Lib\site-packages\pytest_asyncio\plugin.py:558: in setup
+    return super().setup()
+           ^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\pytest_asyncio\plugin.py:944: in pytest_fixture_setup
+    hook_result = yield
+                  ^^^^^
+.venv\Lib\site-packages\pytest_asyncio\plugin.py:407: in _asyncgen_fixture_wrapper
+    result = runner.run(setup(), context=context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+G:\toolsr\python3.13-exe\Lib\asyncio\runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+G:\toolsr\python3.13-exe\Lib\asyncio\base_events.py:721: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\pytest_asyncio\plugin.py:403: in setup
+    res = await gen_obj.__anext__()
+          ^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\conftest.py:44: in running_daemon
+    pytest.fail("Daemon did not start within 3 seconds")
+E   Failed: Daemon did not start within 3 seconds
+---------------------------- Captured stderr setup ----------------------------
+ANTHROPIC_API_KEY not set
+
+_____________ ERROR at setup of test_unknown_method_returns_error _____________
+.venv\Lib\site-packages\pytest_asyncio\plugin.py:558: in setup
+    return super().setup()
+           ^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\pytest_asyncio\plugin.py:944: in pytest_fixture_setup
+    hook_result = yield
+                  ^^^^^
+.venv\Lib\site-packages\pytest_asyncio\plugin.py:407: in _asyncgen_fixture_wrapper
+    result = runner.run(setup(), context=context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+G:\toolsr\python3.13-exe\Lib\asyncio\runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+G:\toolsr\python3.13-exe\Lib\asyncio\base_events.py:721: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\pytest_asyncio\plugin.py:403: in setup
+    res = await gen_obj.__anext__()
+          ^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\conftest.py:44: in running_daemon
+    pytest.fail("Daemon did not start within 3 seconds")
+E   Failed: Daemon did not start within 3 seconds
+---------------------------- Captured stderr setup ----------------------------
+ANTHROPIC_API_KEY not set
+
+______________ ERROR at setup of test_invalid_json_returns_error ______________
+.venv\Lib\site-packages\pytest_asyncio\plugin.py:558: in setup
+    return super().setup()
+           ^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\pytest_asyncio\plugin.py:944: in pytest_fixture_setup
+    hook_result = yield
+                  ^^^^^
+.venv\Lib\site-packages\pytest_asyncio\plugin.py:407: in _asyncgen_fixture_wrapper
+    result = runner.run(setup(), context=context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+G:\toolsr\python3.13-exe\Lib\asyncio\runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+G:\toolsr\python3.13-exe\Lib\asyncio\base_events.py:721: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\pytest_asyncio\plugin.py:403: in setup
+    res = await gen_obj.__anext__()
+          ^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\conftest.py:44: in running_daemon
+    pytest.fail("Daemon did not start within 3 seconds")
+E   Failed: Daemon did not start within 3 seconds
+---------------------------- Captured stderr setup ----------------------------
+ANTHROPIC_API_KEY not set
+
+______ ERROR at setup of test_agent_run_returns_run_id_and_emits_started ______
+.venv\Lib\site-packages\pytest_asyncio\plugin.py:558: in setup
+    return super().setup()
+           ^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\pytest_asyncio\plugin.py:944: in pytest_fixture_setup
+    hook_result = yield
+                  ^^^^^
+.venv\Lib\site-packages\pytest_asyncio\plugin.py:407: in _asyncgen_fixture_wrapper
+    result = runner.run(setup(), context=context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+G:\toolsr\python3.13-exe\Lib\asyncio\runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+G:\toolsr\python3.13-exe\Lib\asyncio\base_events.py:721: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\pytest_asyncio\plugin.py:403: in setup
+    res = await gen_obj.__anext__()
+          ^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\conftest.py:44: in running_daemon
+    pytest.fail("Daemon did not start within 3 seconds")
+E   Failed: Daemon did not start within 3 seconds
+---------------------------- Captured stderr setup ----------------------------
+ANTHROPIC_API_KEY not set
+
+__________ ERROR at setup of test_two_clients_both_receive_broadcast __________
+.venv\Lib\site-packages\pytest_asyncio\plugin.py:558: in setup
+    return super().setup()
+           ^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\pytest_asyncio\plugin.py:944: in pytest_fixture_setup
+    hook_result = yield
+                  ^^^^^
+.venv\Lib\site-packages\pytest_asyncio\plugin.py:407: in _asyncgen_fixture_wrapper
+    result = runner.run(setup(), context=context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+G:\toolsr\python3.13-exe\Lib\asyncio\runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+G:\toolsr\python3.13-exe\Lib\asyncio\base_events.py:721: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\pytest_asyncio\plugin.py:403: in setup
+    res = await gen_obj.__anext__()
+          ^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\conftest.py:44: in running_daemon
+    pytest.fail("Daemon did not start within 3 seconds")
+E   Failed: Daemon did not start within 3 seconds
+---------------------------- Captured stderr setup ----------------------------
+ANTHROPIC_API_KEY not set
+
+____________ ERROR at setup of test_disconnect_and_replay_from_run ____________
+.venv\Lib\site-packages\pytest_asyncio\plugin.py:558: in setup
+    return super().setup()
+           ^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\pytest_asyncio\plugin.py:944: in pytest_fixture_setup
+    hook_result = yield
+                  ^^^^^
+.venv\Lib\site-packages\pytest_asyncio\plugin.py:407: in _asyncgen_fixture_wrapper
+    result = runner.run(setup(), context=context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+G:\toolsr\python3.13-exe\Lib\asyncio\runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+G:\toolsr\python3.13-exe\Lib\asyncio\base_events.py:721: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\pytest_asyncio\plugin.py:403: in setup
+    res = await gen_obj.__anext__()
+          ^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\conftest.py:44: in running_daemon
+    pytest.fail("Daemon did not start within 3 seconds")
+E   Failed: Daemon did not start within 3 seconds
+---------------------------- Captured stderr setup ----------------------------
+ANTHROPIC_API_KEY not set
+
+________ ERROR at setup of test_session_create_history_close_over_ipc _________
+.venv\Lib\site-packages\pytest_asyncio\plugin.py:558: in setup
+    return super().setup()
+           ^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\pytest_asyncio\plugin.py:944: in pytest_fixture_setup
+    hook_result = yield
+                  ^^^^^
+.venv\Lib\site-packages\pytest_asyncio\plugin.py:407: in _asyncgen_fixture_wrapper
+    result = runner.run(setup(), context=context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+G:\toolsr\python3.13-exe\Lib\asyncio\runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+G:\toolsr\python3.13-exe\Lib\asyncio\base_events.py:721: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\pytest_asyncio\plugin.py:403: in setup
+    res = await gen_obj.__anext__()
+          ^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\conftest.py:44: in running_daemon
+    pytest.fail("Daemon did not start within 3 seconds")
+E   Failed: Daemon did not start within 3 seconds
+---------------------------- Captured stderr setup ----------------------------
+ANTHROPIC_API_KEY not set
+
+=========================== short test summary info ===========================
+ERROR tests/integration/test_ping_roundtrip.py::test_ping_returns_pong - Fail...
+ERROR tests/integration/test_ping_roundtrip.py::test_unknown_method_returns_error
+ERROR tests/integration/test_ping_roundtrip.py::test_invalid_json_returns_error
+ERROR tests/integration/test_s2_dual_process.py::test_agent_run_returns_run_id_and_emits_started
+ERROR tests/integration/test_s2_dual_process.py::test_two_clients_both_receive_broadcast
+ERROR tests/integration/test_s2_dual_process.py::test_disconnect_and_replay_from_run
+ERROR tests/integration/test_s4_session_ipc.py::test_session_create_history_close_over_ipc
+======================== 3 passed, 7 errors in 31.19s =========================

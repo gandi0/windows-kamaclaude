@@ -44,12 +44,16 @@ def _now() -> str:
 
 class AnthropicProvider:
     # 初始化 Anthropic 客户端；client 可在测试时注入以跳过 API key 检查
-    def __init__(self, model: str, client: Any = None) -> None:
+    # base_url 用于配置兼容端点（如阿里 DashScope），留空则使用 SDK 默认
+    def __init__(self, model: str, client: Any = None, base_url: str | None = None) -> None:
         if client is None:
             api_key = os.environ.get("ANTHROPIC_API_KEY")
             if not api_key:
                 raise SystemExit("ANTHROPIC_API_KEY not set")
-            self._client: Any = anthropic.AsyncAnthropic(api_key=api_key)
+            kwargs: dict[str, Any] = {"api_key": api_key}
+            if base_url:
+                kwargs["base_url"] = base_url
+            self._client: Any = anthropic.AsyncAnthropic(**kwargs)
         else:
             self._client = client
         self._model = model

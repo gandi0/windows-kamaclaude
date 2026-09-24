@@ -1,0 +1,70 @@
+name: S8 no-API validation
+
+on:
+  pull_request:
+  push:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  windows-python312:
+    runs-on: windows-latest
+    timeout-minutes: 30
+    env:
+      ANTHROPIC_API_KEY: ""
+      ANTHROPIC_AUTH_TOKEN: ""
+      PYTHON_DOTENV_DISABLED: "1"
+      PYTHONDONTWRITEBYTECODE: "1"
+      PYTHONUTF8: "1"
+      KAMA_CONFIG: ${{ runner.temp }}\kama-isolated-config.toml
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install project and validation tools
+        shell: pwsh
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -e . pytest pytest-asyncio mypy ruff
+
+      - name: Run S8 fault matrix with fixed providers
+        shell: pwsh
+        run: >-
+          python scripts/s8/check_baseline.py
+          --check s85
+          --output "${{ runner.temp }}\s85-matrix"
+
+      - name: Run unit tests without provider credentials
+        shell: pwsh
+        run: >-
+          python scripts/s8/check_baseline.py
+          --check unit
+          --output "${{ runner.temp }}\s85-unit"
+
+      - name: Run no-API integration tests
+        shell: pwsh
+        run: >-
+          python scripts/s8/check_baseline.py
+          --check integration
+          --output "${{ runner.temp }}\s85-integration"
+
+      - name: Run type and protocol checks
+        shell: pwsh
+        run: |
+          python scripts/s8/check_baseline.py --check mypy --output "${{ runner.temp }}\s85-mypy"
+          python scripts/s8/check_baseline.py --check protocol --output "${{ runner.temp }}\s85-protocol"
+          python -m ruff check scripts/s8/check_baseline.py scripts/s8/run_s85_matrix.py scripts/s8/benchmark_s85.py
+
+      - name: Upload no-API evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: s8-no-api-${{ runner.os }}-py312
+          path: ${{ runner.temp }}\s85-*
+          if-no-files-found: error

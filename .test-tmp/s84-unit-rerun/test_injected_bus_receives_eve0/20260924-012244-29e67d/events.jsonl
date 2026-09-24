@@ -1,0 +1,4 @@
+{"type":"run.started","run_id":"20260924-012244-29e67d","session_id":null,"goal":"goal","ts":"2026-09-24T01:22:44.645005+00:00"}
+{"type":"step.started","run_id":"20260924-012244-29e67d","step":1,"ts":"2026-09-24T01:22:44.646012+00:00"}
+{"type":"step.finished","run_id":"20260924-012244-29e67d","step":1,"ts":"2026-09-24T01:22:44.648112+00:00"}
+{"type":"run.finished","run_id":"20260924-012244-29e67d","session_id":null,"status":"success","reason":null,"steps":1,"ts":"2026-09-24T01:22:44.648112+00:00"}

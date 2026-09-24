@@ -1,0 +1,2 @@
+{"type":"run.started","run_id":"r1","session_id":null,"goal":"g1","ts":"2026-05-11T00:00:00Z"}
+{"type":"run.finished","run_id":"r1","session_id":null,"status":"success","reason":null,"steps":2,"ts":"2026-05-11T00:00:01Z"}

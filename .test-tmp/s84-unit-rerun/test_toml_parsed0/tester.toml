@@ -1,0 +1,5 @@
+[agent]
+description = "测试角色"
+system_prompt = "你是测试助手。"
+allowed_tools = ["read_file", "bash"]
+model = "claude-sonnet-4-6"

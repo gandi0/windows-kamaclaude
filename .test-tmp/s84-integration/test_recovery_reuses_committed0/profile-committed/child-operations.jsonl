@@ -1,0 +1,6 @@
+{"ts": 1790213018.9989772, "pid": 6492, "operation": "daemon.start", "scenario": "committed-result"}
+{"ts": 1790213021.3076289, "pid": 6492, "operation": "provider.chat", "count": 1, "run_id": "20260924-012341-d367be", "step": 1}
+{"ts": 1790213021.6963868, "pid": 6492, "operation": "provider.chat", "count": 2, "run_id": "20260924-012341-d367be", "step": 2}
+{"ts": 1790213021.6963868, "pid": 6492, "operation": "barrier.reached", "name": "second-model-entry"}
+{"ts": 1790213023.1484716, "pid": 26140, "operation": "daemon.start", "scenario": "committed-result"}
+{"ts": 1790213025.406781, "pid": 26140, "operation": "provider.chat", "count": 3, "run_id": "20260924-012341-d367be", "step": 2}

@@ -1,0 +1,2 @@
+{"ts":"2026-09-24T01:23:02.060654+00:00","direction":"CORE→LLM","layer":"llm","kind":"api_call","run_id":"r","step":7,"client_id":null,"data":{"messages":[],"tool_schemas":[],"system":null}}
+{"ts":"2026-09-24T01:23:02.060654+00:00","direction":"LLM→CORE","layer":"llm","kind":"api_response","run_id":"r","step":7,"client_id":null,"data":{"stop_reason":"end_turn","text":"done","tool_calls":[],"usage":{"input_tokens":10,"output_tokens":5,"cache_read_input_tokens":0,"cache_creation_input_tokens":0,"context_pct":0.0},"latency_ms":0}}

@@ -1,0 +1,200 @@
+{
+  "sample_count": 15,
+  "baseline": {
+    "append": {
+      "n": 15,
+      "median_ns": 52983300,
+      "p95_ns": 63053200,
+      "min_ns": 50403600,
+      "max_ns": 63053200
+    },
+    "read": {
+      "n": 15,
+      "median_ns": 614600,
+      "p95_ns": 794000,
+      "min_ns": 585200,
+      "max_ns": 794000
+    },
+    "compaction_commit": {
+      "n": 15,
+      "median_ns": 865300,
+      "p95_ns": 1268200,
+      "min_ns": 781200,
+      "max_ns": 1268200
+    },
+    "fake_provider_generation": {
+      "n": 15,
+      "median_ns": 49200,
+      "p95_ns": 237500,
+      "min_ns": 45400,
+      "max_ns": 237500
+    },
+    "persistence_bytes": {
+      "n": 15,
+      "median": 72875,
+      "min": 72875,
+      "max": 72875
+    }
+  },
+  "s8": {
+    "append": {
+      "n": 15,
+      "median_ns": 120890300,
+      "p95_ns": 159995000,
+      "min_ns": 113671300,
+      "max_ns": 159995000
+    },
+    "read": {
+      "n": 15,
+      "median_ns": 1187400,
+      "p95_ns": 2124000,
+      "min_ns": 1039300,
+      "max_ns": 2124000
+    },
+    "compaction_commit": {
+      "n": 15,
+      "median_ns": 2284900,
+      "p95_ns": 3558000,
+      "min_ns": 1887100,
+      "max_ns": 3558000
+    },
+    "fake_provider_generation": {
+      "n": 15,
+      "median_ns": 53400,
+      "p95_ns": 58000,
+      "min_ns": 52300,
+      "max_ns": 58000
+    },
+    "persistence_bytes": {
+      "n": 15,
+      "median": 3699576,
+      "min": 3699576,
+      "max": 3707816
+    },
+    "recovery": {
+      "open_ns": {
+        "n": 15,
+        "median_ns": 1741800,
+        "p95_ns": 3217800,
+        "min_ns": 1574800,
+        "max_ns": 3217800
+      },
+      "scan_ns": {
+        "n": 15,
+        "median_ns": 1974500,
+        "p95_ns": 2550100,
+        "min_ns": 1570200,
+        "max_ns": 2550100
+      },
+      "index_ns": {
+        "n": 15,
+        "median_ns": 195900,
+        "p95_ns": 600900,
+        "min_ns": 181900,
+        "max_ns": 600900
+      },
+      "claim_ns": {
+        "n": 15,
+        "median_ns": 1764900,
+        "p95_ns": 3581100,
+        "min_ns": 1569500,
+        "max_ns": 3581100
+      },
+      "continue_to_terminal_ns": {
+        "n": 15,
+        "median_ns": 6421200,
+        "p95_ns": 8961100,
+        "min_ns": 5614500,
+        "max_ns": 8961100
+      },
+      "status_query_ns": {
+        "n": 15,
+        "median_ns": 293100,
+        "p95_ns": 520100,
+        "min_ns": 265200,
+        "max_ns": 520100
+      },
+      "restart_to_query_ready_ns": {
+        "n": 15,
+        "median_ns": 13121600,
+        "p95_ns": 17286100,
+        "min_ns": 11217600,
+        "max_ns": 17286100
+      }
+    }
+  },
+  "persistence_comparison": {
+    "s8_minus_baseline_median_ns": 67907000,
+    "s8_over_baseline_median_ratio": 2.281667997274613,
+    "warning": "The stores provide different durability and recovery semantics; this ratio is not an end-to-end throughput claim."
+  },
+  "context": {
+    "raw": {
+      "messages": 200,
+      "content_characters": 51800,
+      "canonical_json_bytes": 58101,
+      "estimated_tokens_char_div_4": 12950
+    },
+    "effective": {
+      "messages": 2,
+      "content_characters": 71,
+      "canonical_json_bytes": 135,
+      "estimated_tokens_char_div_4": 17
+    }
+  },
+  "database_growth": {
+    "configured_tool_calls": 20,
+    "row_counts": {
+      "messages": 42,
+      "tool_calls": 20,
+      "attempts": 20,
+      "summaries": 1
+    },
+    "initial_schema_wal_live": {
+      "execution.sqlite3": 4096,
+      "execution.sqlite3-shm": 32768,
+      "execution.sqlite3-wal": 173072,
+      "__total__": 209936
+    },
+    "initial_wal_checkpoint_result": [
+      0,
+      0,
+      0
+    ],
+    "initial_schema_checkpointed": {
+      "execution.sqlite3": 172032,
+      "execution.sqlite3-shm": 32768,
+      "execution.sqlite3-wal": 0,
+      "__total__": 204800
+    },
+    "after_run": {
+      "execution.sqlite3": 172032,
+      "execution.sqlite3-shm": 32768,
+      "execution.sqlite3-wal": 53592,
+      "__total__": 258392
+    },
+    "after_workload_wal_live": {
+      "execution.sqlite3": 172032,
+      "execution.sqlite3-shm": 32768,
+      "execution.sqlite3-wal": 1965272,
+      "__total__": 2170072
+    },
+    "after_summary_wal_live": {
+      "execution.sqlite3": 172032,
+      "execution.sqlite3-shm": 32768,
+      "execution.sqlite3-wal": 1985872,
+      "__total__": 2190672
+    },
+    "wal_checkpoint_result": [
+      0,
+      0,
+      0
+    ],
+    "after_wal_checkpoint_truncate": {
+      "execution.sqlite3": 208896,
+      "execution.sqlite3-shm": 32768,
+      "execution.sqlite3-wal": 0,
+      "__total__": 241664
+    }
+  }
+}
