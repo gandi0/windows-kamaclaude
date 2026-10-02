@@ -1,167 +1,208 @@
-更好的Kamaclaude模型（拓展分支）加上测试适配windows平台的修复
-！！！【本项目readme还在和codex交流重写中，下述借用下卡哥原项目的介绍先】
+# 🤖 KamaClaude · Windows Fork
 
-### 项目特色
+> 从零实现的本地 Agent 运行时 —— daemon + IPC + ReAct Loop + 多 Agent + MCP + **跨重启恢复**
 
-这个项目，我采用全新的讲解方式，不是一下子直接给大家全部项目代码。
+[![Python](https://img.shields.io/badge/Python-3.12-3776ab?logo=python&logoColor=white)](https://www.python.org/downloads/release/python-3120/)
+[![Asyncio](https://img.shields.io/badge/Async-asyncio-16803c)](#)
+[![TUI](https://img.shields.io/badge/TUI-Textual-0f766e)](#)
+[![Storage](https://img.shields.io/badge/Storage-SQLite%20%2B%20JSONL-7c3aed)](#)
+[![Windows](https://img.shields.io/badge/Windows-Shell%20Worker-0078d4?logo=windows&logoColor=white)](#)
+[![License](https://img.shields.io/badge/License-MIT-0f172a)](#)
 
-而且分成了 8个阶段，一步一步，带大家实现完整的kamaClaude。
+---
 
-每个阶段都不是堆功能，而是解决一个真实的 Agent 工程问题。
+**KamaClaude** 不是一个"调用大模型 API"的脚本，而是一套完整的本地 Agent 运行时。从 `kama-core` daemon 到 TUI 前端，从 ReAct AgentLoop 到多 Agent 编排，从工具安全锁到上下文治理 —— 每个阶段解决一个真实的工程问题。
 
-![](docs/images/2026-06-10_11-01-32.jpg)
+**本 Fork 在上游 S0~S7 基础上，额外贡献了 S8（SQLite 持久化 + 跨重启恢复）和 S9（统一摘要系统），并完整适配 Windows 平台 。**
 
-| 阶段 | 主题 | 这一阶段真正解决的问题 |
-| --- | --- | --- |
-| S0 | 骨架与协议契约 | CLI 和 daemon 通过真实 IPC 完成一次 ping/pong |
-| S1 | Agent 最小闭环 | 一次 `kama run` 从 goal 到 LLM、工具、事件文件完整跑通 |
-| S2 | 事件流外化 | AgentRunner 搬进 daemon，CLI/TUI 通过 IPC 订阅同一份事件流 |
-| S3 | 自主规划与 TUI | Agent 能用任务工具拆解复杂目标，TUI 展示完整执行过程 |
-| Trace | 系统级时间线 | IPC / EventBus / LLM 三层数据流可追踪、可回放 |
-| S4 | 会话与记忆 | 多轮 run 进入同一个 session，thread 和 notes 接住上下文 |
-| S5 | 工具安全 | 工具调用前有参数校验、权限审批、失败分类和重试 |
-| S6 | 上下文治理 | 长会话下有 context 水位、tool_result 截断和 compact |
-| S7 | 扩展边界 | Skills、Subagents、MCP 让 Agent 可组织、可派生、可接外部工具 |
+---
 
-从第一章开始，项目就不是“先写一个脚本，后面再慢慢重构”。
+## 🏗️ 架构总览
 
-KamaClaude 在 S0 就先把 `kama` CLI 和 `kama-core` daemon 拆开，通过 TCP NDJSON + JSON-RPC 2.0 通信。
+```mermaid
+flowchart TD
+    subgraph Client["🖥️ 客户端（同一套 IPC）"]
+        CLI["kama CLI"]
+        TUI["kama-tui<br/>Textual TUI"]
+    end
 
-这一步看起来比普通脚手架更重，但它换来的是后面所有能力都不用推倒重来：
+    subgraph IPC["🔗 IPC 层"]
+        PROTO["TCP NDJSON + JSON-RPC 2.0"]
+    end
 
-* TUI 可以复用同一套 IPC
-* 事件订阅可以复用同一套通道
-* 权限审批可以通过事件推到前端
-* trace 可以记录完整请求和响应
-* 后续 Web 前端也可以接入同一个 Core
+    subgraph Core["⚙️ kama-core daemon"]
+        direction TB
+        RUNNER["AgentRunner"]
+        LOOP["ReAct AgentLoop"]
+        PROVIDER["LLM Provider"]
+        REGISTRY["ToolRegistry"]
+        PERM["PermissionManager"]
+        BUS["EventBus"]
+        SESSION["SessionManager"]
+    end
 
-这就是工程项目里真正值钱的地方。
+    subgraph Persist["💾 持久化（本 Fork 增强）"]
+        direction LR
+        JSONL["thread.jsonl<br/>事件流"]
+        SQLITE[("SQLite<br/>sessions · runs · messages · checkpoints<br/>跨重启恢复")]
+        MD["notes.md / context.md"]
+    end
 
-不是“能不能跑”，而是系统边界一开始就立住。
+    subgraph Ext["🔌 扩展边界"]
+        SKILL["Skills"]
+        SUB["Subagents"]
+        MCP["MCP Servers"]
+    end
 
-### 项目架构图
+    CLI --> PROTO
+    TUI --> PROTO
+    PROTO --> RUNNER
+    RUNNER --> LOOP
+    LOOP --> PROVIDER
+    LOOP --> REGISTRY
+    REGISTRY --> PERM
+    LOOP --> BUS
+    RUNNER --> SESSION
+    BUS --> JSONL
+    SESSION --> SQLITE
+    SESSION --> MD
+    REGISTRY --> SKILL
+    REGISTRY --> SUB
+    REGISTRY --> MCP
 
-![](docs/images/20260610114820_KamaClaude架构图-分层版.png)
-
-KamaClaude 的核心不是一个 prompt，而是一套完整的本地 Agent 运行链路：
-
-```latex
-用户目标
-  → CLI / TUI
-  → JSON-RPC over NDJSON
-  → kama-core daemon
-  → AgentRunner
-  → AgentLoop
-  → LLM Provider
-  → ToolRegistry
-  → PermissionManager
-  → EventBus
-  → Session Store
-  → TUI 实时渲染 / events.jsonl 持久化 / trace 回放
+    classDef client fill:#fef3c7,stroke:#d97706,color:#78350f;
+    classDef ipc fill:#f1f5f9,stroke:#475569,color:#1e293b;
+    classDef core fill:#eff6ff,stroke:#2563eb,color:#172554;
+    classDef fork fill:#f0fdf4,stroke:#16a34a,color:#14532d;
+    classDef ext fill:#faf5ff,stroke:#9333ea,color:#4c1d95;
+    class CLI,TUI client;
+    class PROTO ipc;
+    class RUNNER,LOOP,PROVIDER,REGISTRY,PERM,BUS,SESSION core;
+    class JSONL,SQLITE,MD fork;
+    class SKILL,SUB,MCP ext;
 ```
 
-你学完以后，面试官再问 AI Agent 项目，你就不是说：
+## ✨ 核心能力
 
-“我调用了大模型 API。”
+| 能力 | 说明 |
+|------|------|
+| 🛡️ **Daemon 多客户端架构** | `kama-core` 独立守护进程，CLI/TUI/Web 共用同一套 IPC，权限审批、事件订阅、Trace 回放全链路统一 |
+| 🧠 **ReAct AgentLoop** | 模型思考 → 工具调用 → 结果回填的多步执行循环，支持 `stop_reason` 驱动的自然终止 |
+| 🔒 **工具安全体系** | Pydantic 参数校验 → PermissionManager 权限审批 → 失败分类 + 指数退避重试，三层防护 |
+| 🗂️ **会话与记忆** | Session + thread.jsonl + notes.md 三层记忆，多层 context.md 拼进 system prompt 不占对话 |
+| 📊 **上下文治理** | `context_pct` 水位可见、`tool_result` 字符截断、自动 compact（`auto_threshold ≥ 0.80`）+ 手动 `/compact` |
+| 🤝 **多 Agent 编排** | `/review` 单角色审查 · `/orchestrate` planner/executor/reviewer 三阶段 · 独立 Context + 事件桥接 |
+| 🔌 **MCP 协议支持** | stdio / 自定义 TCP 两种传输，McpTool → BaseTool 适配器，`{server}__{tool}` 命名空间 |
 
-而是能说：
+## ⭐ Windows Fork 独家贡献
 
-* 我实现了 ReAct AgentLoop 和工具调用闭环
-* 我用 EventBus 把 Agent 执行过程外化成事件流
-* 我实现了 TUI 实时渲染、工具折叠块、权限审批卡片
-* 我实现了 Session、thread、notes 三层记忆体系
-* 我实现了上下文水位检测、tool_result 截断、自动 compact 和手动 compact
-* 我实现了 Skills、Subagents、MCP 外部工具接入
-* 我用 pytest、mypy strict、ruff 保证项目质量
-* 我实现了守护进程 + 多客户端架构
-* 我设计了 JSON-RPC 2.0 + NDJSON 的类型化 IPC 协议
+> 在上游 S0~S7 基础上，本 Fork 额外实现了两个关键阶段
 
-这就不是“AI 套壳项目”了。
+### S8 · SQLite 持久化 + 跨重启恢复
 
-这是一个能拿去讲系统设计、异步并发、协议建模、工具安全、上下文工程、多 Agent 编排的高质量项目。
+```
+┌─────────────────────────────────────────────────────┐
+│  上游：JSONL 持久化                                    │
+│  session_id → thread.jsonl + runs/ + notes.md        │
+│  ❌ 进程挂了 = run 丢了                                │
+│  ❌ 没有 checkpoint，没法续跑                           │
+├─────────────────────────────────────────────────────┤
+│  ⭐ 本 Fork：SQLite + checkpoint                      │
+│  12 张表：sessions · runs · messages · checkpoints …  │
+│  ✅ 进程挂了 → context 进入 interrupted 状态           │
+│  ✅ kama resume → 从最近 checkpoint 续跑              │
+│  ✅ 已完成工具结果直接复用，不重复执行                   │
+└─────────────────────────────────────────────────────┘
+```
 
-### 项目亮点
+- **Windows Shell Worker 三层防护**：独立子进程执行 shell，Windows Job Object 绑定父子生命周期，sandbox 隔离
+- **会话状态机**：`active` → `interrupted` → `needs_review` → `cancelled` → `completed`
+- **12 张表完整 schema**：覆盖 session、run、message、checkpoint、tool_call、permission 全链路
 
-![](docs/images/2026-06-10_11-48-11.jpg)
+### S9 · 统一摘要系统
 
-KamaClaude 最大的亮点，是把 Claude Code 这类 AI 编程 Agent 背后的核心机制，用一个 mini 版工程完整跑通：它不是单进程脚本，而是 `kama-core` daemon + CLI/TUI 多客户端架构；
+- 合并 S6 自动 compact 和 S8 恢复场景的摘要需求为统一 Compactor
+- Tool Result 截断增强：智能保留头尾 + 错误优先 + 按需读取完整事件
+- 摘要质量校验：程序化检查六段结构，短历史拒绝扩写
 
-不是一次性调大模型，而是 ReAct AgentLoop，支持模型思考、工具调用、结果回填和多步执行；
+---
 
-不是让模型说执行就执行，而是把工具调用放进 `ToolRegistry` 和 `PermissionManager`，先做参数校验、权限审批、失败分类，再把 tool result 返回给模型；
+## 🗺️ 完整阶段导航
 
-不是只展示最终答案，而是通过 `EventBus`、events、trace 和 TUI，把 token 流、工具调用、审批、上下文水位都实时展示并可回放；
+点击分支名直达对应阶段的 README 和源码：
 
-不是简单拼接聊天历史，而是用 session、thread、notes、context 和 compact 做上下文治理；
+| 阶段 | 主题 | 解决的工程问题 | 分支 |
+|------|------|---------------|------|
+| **S0** | 骨架与协议契约 | CLI 和 daemon 通过真实 IPC 完成 ping/pong | [`stage/s0`](https://github.com/gandi0/windows-kamaclaude/tree/stage/s0) · 🚧 待重写 |
+| **S1** | Agent 最小闭环 | 一次 `kama run` 从 goal 到 LLM、工具、事件文件完整跑通 | [`stage/s1`](https://github.com/gandi0/windows-kamaclaude/tree/stage/s1) |
+| **S2** | 事件流外化 | AgentRunner 搬进 daemon，CLI/TUI 通过 IPC 订阅同一份事件流 | [`stage/s2`](https://github.com/gandi0/windows-kamaclaude/tree/stage/s2) |
+| **S3** | 自主规划 + Trace | Agent 能用任务工具拆解复杂目标；IPC / EventBus / LLM 三层数据流可追踪回放 | [`stage/s3`](https://github.com/gandi0/windows-kamaclaude/tree/stage/s3) |
+| **S4** | 会话与记忆 | 多轮 run 进入同一个 session，thread 和 notes 接住上下文 | [`stage/s4`](https://github.com/gandi0/windows-kamaclaude/tree/stage/s4) |
+| **S5** | 工具安全锁 | 工具调用前有参数校验、权限审批、失败分类和重试 | [`stage/s5`](https://github.com/gandi0/windows-kamaclaude/tree/stage/s5) |
+| **S6** | 上下文治理 | 长会话下有 context 水位、`tool_result` 截断和 compact | [`stage/s6`](https://github.com/gandi0/windows-kamaclaude/tree/stage/s6) |
+| **S7** | 扩展边界 | Skills、Subagents、MCP 让 Agent 可组织、可派生、可接外部工具 | [`stage/s7`](https://github.com/gandi0/windows-kamaclaude/tree/stage/s7) |
+| **S8** ⭐ | **SQLite 持久化 + 跨重启恢复** | **进程挂了能续跑 — checkpoints + Windows Shell Worker** | [`s8`](https://github.com/gandi0/windows-kamaclaude/tree/s8) |
+| **S9** ⭐ | **统一摘要系统 + Tool Result 截断** | **S6 compact + S8 恢复场景的摘要需求合并** | [`s9`](https://github.com/gandi0/windows-kamaclaude/tree/s9) |
 
-最后还支持 Skills、Subagents、MCP，把工作流、子 Agent 和外部工具统一接进同一套运行链路。
+<details>
+<summary>📋 每个阶段的主 README 和深度指南</summary>
 
-也就是说，这个项目真正能讲的不是“我接了一个大模型接口”，而是“我实现了一个本地 Agent 运行时”。
+| 分支 | 主 README | 深度指南 |
+|------|-----------|---------|
+| stage/s1 | [README](https://github.com/gandi0/windows-kamaclaude/blob/stage/s1/README.md) | [Agent Runtime](https://github.com/gandi0/windows-kamaclaude/blob/stage/s1/docs/S1-Agent-Runtime.md) |
+| stage/s2 | [README](https://github.com/gandi0/windows-kamaclaude/blob/stage/s2/README.md) | [IPC](https://github.com/gandi0/windows-kamaclaude/blob/stage/s2/docs/S2-IPC.md) |
+| stage/s3 | [README](https://github.com/gandi0/windows-kamaclaude/blob/stage/s3/README.md) | [Planning](https://github.com/gandi0/windows-kamaclaude/blob/stage/s3/docs/S3-Agent-Planning.md) · [Trace](https://github.com/gandi0/windows-kamaclaude/blob/stage/s3/docs/S3-Trace-System.md) |
+| stage/s4 | [README](https://github.com/gandi0/windows-kamaclaude/blob/stage/s4/README.md) | [Session](https://github.com/gandi0/windows-kamaclaude/blob/stage/s4/docs/S4-Session.md) |
+| stage/s5 | [README](https://github.com/gandi0/windows-kamaclaude/blob/stage/s5/README.md) | [Tool Safety](https://github.com/gandi0/windows-kamaclaude/blob/stage/s5/docs/S5-Tool-Safety.md) |
+| stage/s6 | [README](https://github.com/gandi0/windows-kamaclaude/blob/stage/s6/README.md) | [Compact](https://github.com/gandi0/windows-kamaclaude/blob/stage/s6/docs/S6-Compact.md) |
+| stage/s7 | [README](https://github.com/gandi0/windows-kamaclaude/blob/stage/s7/README.md) | [Skills/Subagents](https://github.com/gandi0/windows-kamaclaude/blob/stage/s7/docs/S7-Skills-Subagents.md) |
+| s8 | [README](https://github.com/gandi0/windows-kamaclaude/blob/s8/README.md) | — |
+| s9 | [README](https://github.com/gandi0/windows-kamaclaude/blob/s9/README.md) | — |
 
+</details>
 
-### 这个项目适合谁？
+---
 
-如果你正在准备秋招、春招、实习、社招，想做一个 AI 项目，想了解Agent工作原理，这个项目很适合你。
+## 🚀 Quick Start
 
-如果你已经做过 RAG、聊天机器人、AI 助手，想把项目深度往 Agent 工程方向拔高，这个项目也很适合。
+```bash
+# 1. 克隆并进入项目
+git clone https://github.com/gandi0/windows-kamaclaude.git
+cd windows-kamaclaude
 
-如果你想理解 Claude Code、Codex、Cursor 这类 AI 编程工具背后的运行时设计，这个项目同样值得系统学一遍。
+# 2. 安装依赖（需要 Python 3.12+）
+uv sync --python 3.12
 
-它不是教你背概念。
+# 3. 启动 daemon + TUI
+# 终端 1
+uv run kama-core
+# 终端 2
+uv run kama-tui
+```
 
-**它是带你从 S0 到 S7，八个阶段，把一个本地 Agent 工具从零搭出来**。
+第一次运行前，在 `~/.kama/config.toml` 配置模型凭据。Windows 用户请使用 Git Bash 或 PowerShell 执行以上命令。
 
-每一章都有明确的执行路径，每一阶段都能运行、能验证、能留下文件证据。
+## 🧰 技术栈
 
-你不是最后拿到一个黑盒项目。
+| 类别 | 技术 |
+|------|------|
+| 语言 | Python 3.12（async/await 全链路） |
+| 异步 | asyncio |
+| TUI | Textual |
+| 数据校验 | Pydantic v2 |
+| 持久化 | SQLite + JSONL |
+| 进程管理 | Windows Job Object（fork 增强） |
+| 协议 | TCP NDJSON + JSON-RPC 2.0 |
+| 代码质量 | mypy strict · ruff · pytest |
 
-你会知道它每一层为什么存在。
+## 🤔 这不是另一个 AI 套壳
 
-### 项目专栏
+学完这个项目，你能在面试里说：
 
-**本项目为文字专栏讲解方式，不过在项目环境配置，启动，使用上 给大家录制了视频**。
+> 我实现了 ReAct AgentLoop 和工具调用闭环，用 EventBus 把执行过程外化成事件流，设计了 JSON-RPC + NDJSON 的类型化 IPC 协议，实现了 Session/thread/notes 三层记忆、上下文水位检测和自动 compact，支持 Skills/Subagents/MCP 多 Agent 编排，以及 SQLite 持久化和跨重启恢复。
 
-项目专栏把 简历写法、项目亮点、常见面试题 都准备好了，大家做完这个项目可以直接用。
+而不是：*"我调用了大模型 API"*。
 
-![](docs/images/2026-06-10_12-11-45.jpg)
+## 📄 License
 
-本项目分成8个阶段完成，每一阶段都有详细讲解：
-
-S0、项目基础架构：
-
-![](docs/images/2026-06-10_12-04-20.jpg)
-
-S1、Agent 第一次运行
-
-![](docs/images/2026-06-10_12-04-40.jpg)
-
-S2、把事件流外化为 IPC
-
-![](docs/images/2026-06-10_12-04-59.jpg)
-
-S3、trace
-
-![](docs/images/2026-06-10_12-05-39.jpg)
-
-S3、Agent 的自主规划
-
-![](docs/images/2026-06-10_12-05-39.jpg)
-
-S4、把 Agent 变成会话伙伴
-
-![](docs/images/2026-06-10_12-05-56.jpg)
-
-S5、给工具加上安全锁
-
-![](docs/images/2026-06-10_12-06-13.jpg)
-
-
-S6、让上下文可控、可压缩、可续航
-
-![](docs/images/2026-06-10_12-06-32.jpg)
-
-S7、Skills、Subagents 与 MCP
-
-![](docs/images/2026-06-10_12-06-51.jpg)
-
-
+MIT
