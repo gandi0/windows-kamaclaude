@@ -133,7 +133,7 @@ flowchart TD
 
 | 阶段 | 主题 | 解决的工程问题 | 分支 |
 |------|------|---------------|------|
-| **S0** | 骨架与协议契约 | CLI 和 daemon 通过真实 IPC 完成 ping/pong | [`stage/s0`](https://github.com/gandi0/windows-kamaclaude/tree/stage/s0) · 🚧 待重写 |
+| **S0** | 骨架与协议契约 | CLI 和 daemon 通过真实 IPC 完成 ping/pong | [`stage/s0`](https://github.com/gandi0/windows-kamaclaude/tree/stage/s0) |
 | **S1** | Agent 最小闭环 | 一次 `kama run` 从 goal 到 LLM、工具、事件文件完整跑通 | [`stage/s1`](https://github.com/gandi0/windows-kamaclaude/tree/stage/s1) |
 | **S2** | 事件流外化 | AgentRunner 搬进 daemon，CLI/TUI 通过 IPC 订阅同一份事件流 | [`stage/s2`](https://github.com/gandi0/windows-kamaclaude/tree/stage/s2) |
 | **S3** | 自主规划 + Trace | Agent 能用任务工具拆解复杂目标；IPC / EventBus / LLM 三层数据流可追踪回放 | [`stage/s3`](https://github.com/gandi0/windows-kamaclaude/tree/stage/s3) |
