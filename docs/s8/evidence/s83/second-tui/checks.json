@@ -1,0 +1,15 @@
+[
+  {
+    "check": "tui-second",
+    "command": [
+      "F:\\exercise\\2026\\kamaclaude - v1\\KamaClaude\\.venv\\Scripts\\python.exe",
+      "scripts/s8/probe_s83.py",
+      "--output",
+      "docs/s8/evidence/s83/second-tui/probe.json",
+      "--pytest-arg=-k",
+      "--pytest-arg=pauses_unknown"
+    ],
+    "exit_code": 0,
+    "seconds": 12.015
+  }
+]

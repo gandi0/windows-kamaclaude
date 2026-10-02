@@ -1,0 +1,81 @@
+{"check": "s82", "command": ["F:\\exercise\\2026\\kamaclaude - v1\\KamaClaude\\.venv\\Scripts\\python.exe", "-m", "pytest", "tests/unit/test_s82_store.py", "tests/unit/test_s82_legacy.py", "tests/unit/test_s82_execution.py", "tests/unit/test_s82_session.py", "tests/unit/test_session_store.py", "tests/unit/test_session_manager.py", "tests/unit/test_runner.py", "-v", "--tb=short", "--basetemp", "C:\\Users\\moxi\\AppData\\Local\\Temp\\kama-s8-s82-y73vas43\\pytest"], "exit_code": 1, "seconds": 3.312}
+============================= test session starts =============================
+platform win32 -- Python 3.12.14, pytest-9.1.1, pluggy-1.6.0 -- F:\exercise\2026\kamaclaude - v1\KamaClaude\.venv\Scripts\python.exe
+cachedir: .pytest_cache
+rootdir: F:\wend\ChatGPT\kamaclaude优化\.s82-work\main
+configfile: pyproject.toml
+asyncio: mode=Mode.AUTO, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collecting ... collected 47 items
+
+tests/unit/test_s82_store.py::test_store_pragmas_seq_and_reopen PASSED   [  2%]
+tests/unit/test_s82_store.py::test_response_attempt_result_and_final PASSED [  4%]
+tests/unit/test_s82_store.py::test_before_commit_rolls_back_response PASSED [  6%]
+tests/unit/test_s82_store.py::test_cancel_after_retry_preserves_attempt_result PASSED [  8%]
+tests/unit/test_s82_store.py::test_newer_schema_is_rejected PASSED       [ 10%]
+tests/unit/test_s82_store.py::test_response_validation_and_run_ownership PASSED [ 12%]
+tests/unit/test_s82_legacy.py::test_legacy_snapshot_preserves_raw_rows PASSED [ 14%]
+tests/unit/test_s82_legacy.py::test_legacy_idempotent_and_append PASSED  [ 17%]
+tests/unit/test_s82_legacy.py::test_legacy_rewrite_isolated PASSED       [ 19%]
+tests/unit/test_s82_legacy.py::test_legacy_missing_snapshot_rejected PASSED [ 21%]
+tests/unit/test_s82_execution.py::test_intent_commit_failure_prevents_tool_execution PASSED [ 23%]
+tests/unit/test_s82_execution.py::test_dispatch_commit_failure_prevents_side_effect PASSED [ 25%]
+tests/unit/test_s82_execution.py::test_result_commit_failure_stops_after_one_side_effect PASSED [ 27%]
+tests/unit/test_s82_execution.py::test_success_persists_full_result_and_retry_attempts PASSED [ 29%]
+tests/unit/test_s82_execution.py::test_cancel_during_retry_backoff_does_not_dispatch_again FAILED [ 31%]
+tests/unit/test_s82_execution.py::test_cancellation_commits_outcome_without_continuation[read_only-known] PASSED [ 34%]
+tests/unit/test_s82_execution.py::test_cancellation_commits_outcome_without_continuation[write-unknown] PASSED [ 36%]
+tests/unit/test_s82_execution.py::test_finished_event_cancellation_preserves_committed_success FAILED [ 38%]
+tests/unit/test_s82_execution.py::test_multi_tool_order_and_compaction_preserve_raw_messages PASSED [ 40%]
+tests/unit/test_s82_execution.py::test_final_response_commit_failure_does_not_report_success PASSED [ 42%]
+tests/unit/test_s82_execution.py::test_runner_maps_storage_error_without_success_event PASSED [ 44%]
+tests/unit/test_s82_session.py::test_two_turns_use_only_sqlite PASSED    [ 46%]
+tests/unit/test_s82_session.py::test_session_binds_tool_workspace PASSED [ 48%]
+tests/unit/test_s82_session.py::test_runner_rejects_completed_run PASSED [ 51%]
+tests/unit/test_s82_session.py::test_unbalanced_batch_blocks_new_input PASSED [ 53%]
+tests/unit/test_s82_session.py::test_compaction_preserves_raw_history PASSED [ 55%]
+tests/unit/test_session_store.py::test_store_creates_root PASSED         [ 57%]
+tests/unit/test_session_store.py::test_meta_roundtrip PASSED             [ 59%]
+tests/unit/test_session_store.py::test_thread_message_roundtrip_with_tool_blocks PASSED [ 61%]
+tests/unit/test_session_store.py::test_read_messages_preserves_orphan_and_blocks_projection PASSED [ 63%]
+tests/unit/test_session_store.py::test_notes_read_and_append PASSED      [ 65%]
+tests/unit/test_session_manager.py::test_create_session_writes_meta_and_event PASSED [ 68%]
+tests/unit/test_session_manager.py::test_send_message_chat_enters_waiting_and_writes_thread PASSED [ 70%]
+tests/unit/test_session_manager.py::test_one_shot_auto_closes PASSED     [ 72%]
+tests/unit/test_session_manager.py::test_missing_session_raises_handler_error PASSED [ 74%]
+tests/unit/test_session_manager.py::test_closed_session_rejects_message PASSED [ 76%]
+tests/unit/test_runner.py::test_run_started_event_published PASSED       [ 78%]
+tests/unit/test_runner.py::test_run_finished_event_published_on_success PASSED [ 80%]
+tests/unit/test_runner.py::test_run_finished_event_published_on_max_steps PASSED [ 82%]
+tests/unit/test_runner.py::test_events_jsonl_created_with_started_and_finished PASSED [ 85%]
+tests/unit/test_runner.py::test_run_creates_run_subdirectory PASSED      [ 87%]
+tests/unit/test_runner.py::test_extra_handlers_receive_events PASSED     [ 89%]
+tests/unit/test_runner.py::test_config_max_steps_passed_to_loop PASSED   [ 91%]
+tests/unit/test_runner.py::test_run_id_embedded_in_started_event PASSED  [ 93%]
+tests/unit/test_runner.py::test_injected_bus_receives_events PASSED      [ 95%]
+tests/unit/test_runner.py::test_session_history_and_notes_injected PASSED [ 97%]
+tests/unit/test_runner.py::test_session_registers_note_save_tool PASSED  [100%]
+
+================================== FAILURES ===================================
+__________ test_cancel_during_retry_backoff_does_not_dispatch_again ___________
+tests\unit\test_s82_execution.py:487: in test_cancel_during_retry_backoff_does_not_dispatch_again
+    assert call["status"] == "cancelled"
+E   AssertionError: assert 'failed' == 'cancelled'
+E     
+E     - cancelled
+E     + failed
+________ test_finished_event_cancellation_preserves_committed_success _________
+F:\exercise\2026\kamaclaude\KamaClaude\.venv\Lib\site-packages\pytest_asyncio\plugin.py:569: in runtest
+    super().runtest()
+F:\exercise\2026\kamaclaude\KamaClaude\.venv\Lib\site-packages\pytest_asyncio\plugin.py:905: in inner
+    runner.run(coro, context=context)
+C:\Users\moxi\AppData\Roaming\uv\python\cpython-3.12-windows-x86_64-none\Lib\asyncio\runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\moxi\AppData\Roaming\uv\python\cpython-3.12-windows-x86_64-none\Lib\asyncio\base_events.py:691: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+E   asyncio.exceptions.CancelledError
+=========================== short test summary info ===========================
+FAILED tests/unit/test_s82_execution.py::test_cancel_during_retry_backoff_does_not_dispatch_again
+FAILED tests/unit/test_s82_execution.py::test_finished_event_cancellation_preserves_committed_success
+======================== 2 failed, 45 passed in 2.53s =========================

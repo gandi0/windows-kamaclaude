@@ -1,0 +1,23 @@
+{"check": "compactor-isolated", "command": ["F:\\wend\\ChatGPT\\kamaclaude优化\\KamaClaude\\.venv\\Scripts\\python.exe", "-m", "pytest", "tests/unit/test_compactor.py", "-v", "--tb=short"], "exit_code": 0, "seconds": 1.582}
+============================= test session starts =============================
+platform win32 -- Python 3.13.0, pytest-9.1.1, pluggy-1.6.0 -- F:\wend\ChatGPT\kamaclaude优化\KamaClaude\.venv\Scripts\python.exe
+cachedir: .pytest_cache
+rootdir: F:\wend\ChatGPT\kamaclaude优化\KamaClaude
+configfile: pyproject.toml
+asyncio: mode=Mode.AUTO, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collecting ... collected 6 items
+
+tests/unit/test_compactor.py::test_compact_messages_calls_provider PASSED [ 16%]
+tests/unit/test_compactor.py::test_compact_messages_returns_summary PASSED [ 33%]
+tests/unit/test_compactor.py::test_compact_replaces_context_messages PASSED [ 50%]
+tests/unit/test_compactor.py::test_compact_writes_summary_file PASSED    [ 66%]
+tests/unit/test_compactor.py::test_compact_publishes_event PASSED        [ 83%]
+tests/unit/test_compactor.py::test_compact_failure_preserves_context PASSED [100%]
+
+============================== warnings summary ===============================
+tests/unit/test_compactor.py::test_compact_messages_calls_provider
+  F:\wend\ChatGPT\kamaclaude优化\KamaClaude\tests\unit\test_compactor.py:42: DeprecationWarning: There is no current event loop
+    result = asyncio.get_event_loop().run_until_complete(
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+======================== 6 passed, 1 warning in 1.10s =========================

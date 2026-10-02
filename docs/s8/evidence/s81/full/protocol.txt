@@ -1,0 +1,2 @@
+{"check": "protocol", "command": ["F:\\wend\\ChatGPT\\kamaclaude优化\\KamaClaude\\.venv\\Scripts\\python.exe", "scripts/gen_protocol_doc.py", "--check"], "exit_code": 0, "seconds": 0.265}
+OK: F:\wend\ChatGPT\kamaclaude优化\KamaClaude\WIRE_PROTOCOL.md is up to date.

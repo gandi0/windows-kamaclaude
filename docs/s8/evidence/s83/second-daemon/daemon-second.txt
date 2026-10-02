@@ -1,0 +1,22 @@
+{"check": "daemon-second", "command": ["F:\\exercise\\2026\\kamaclaude - v1\\KamaClaude\\.venv\\Scripts\\python.exe", "-m", "pytest", "tests/integration/test_s83_recovery.py", "-x", "-v", "--tb=short", "--basetemp", "C:\\Users\\moxi\\AppData\\Local\\Temp\\kama-s8-daemon-second-htme7zqe\\pytest"], "exit_code": 1, "seconds": 8.766}
+============================= test session starts =============================
+platform win32 -- Python 3.12.14, pytest-9.1.1, pluggy-1.6.0 -- F:\exercise\2026\kamaclaude - v1\KamaClaude\.venv\Scripts\python.exe
+cachedir: .pytest_cache
+rootdir: F:\wend\ChatGPT\kamaclaude优化\.s83-work\main
+configfile: pyproject.toml
+asyncio: mode=Mode.AUTO, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collecting ... collected 8 items
+
+tests/integration/test_s83_recovery.py::test_recovery_reuses_committed_result_and_request_identity FAILED [ 12%]
+
+================================== FAILURES ===================================
+_________ test_recovery_reuses_committed_result_and_request_identity __________
+tests\integration\test_s83_recovery.py:181: in test_recovery_reuses_committed_result_and_request_identity
+    assert sum(bool(item.get("started")) for item in resumes) == 1, resumes
+E   AssertionError: [{'run_id': '20260923-151826-fa9cdc', 'status': 'needs_review', 'started': False, 'reason': 'recovery_blocked:workspace_unknown_file_set:c98b9aa5d5844e58b87c6d400b8815b1'}, {'run_id': '20260923-151826-fa9cdc', 'status': 'needs_review', 'started': False, 'reason': 'recovery_blocked:workspace_unknown_file_set:c98b9aa5d5844e58b87c6d400b8815b1'}]
+E   assert 0 == 1
+E    +  where 0 = sum(<generator object test_recovery_reuses_committed_result_and_request_identity.<locals>.<genexpr> at 0x000002CC101010E0>)
+=========================== short test summary info ===========================
+FAILED tests/integration/test_s83_recovery.py::test_recovery_reuses_committed_result_and_request_identity
+!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!
+============================== 1 failed in 8.08s ==============================

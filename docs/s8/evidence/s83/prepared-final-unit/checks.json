@@ -1,0 +1,17 @@
+[
+  {
+    "check": "unit",
+    "command": [
+      "F:\\exercise\\2026\\kamaclaude - v1\\KamaClaude\\.venv\\Scripts\\python.exe",
+      "-m",
+      "pytest",
+      "tests/unit",
+      "-v",
+      "--tb=short",
+      "--basetemp",
+      "C:\\Users\\moxi\\AppData\\Local\\Temp\\kama-s8-unit-bk3l2inm\\pytest"
+    ],
+    "exit_code": 1,
+    "seconds": 21.797
+  }
+]

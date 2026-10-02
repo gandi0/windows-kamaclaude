@@ -1,0 +1,21 @@
+{
+  "windows_python312": {
+    "available": true,
+    "validated": true,
+    "python": "3.12.14",
+    "os": "Windows 11 10.0.26100"
+  },
+  "wsl2": {
+    "distribution": "Ubuntu-22.04",
+    "state": "Stopped",
+    "version": 2,
+    "validated": false,
+    "reason": "WSL status reported that virtualization support is unavailable; the distribution was not started"
+  },
+  "python313": {
+    "interpreter": "G:/toolsr/python3.13-exe/python.exe",
+    "version": "3.13.0",
+    "validated": false,
+    "reason": "the standalone interpreter has no pytest installation; no dependency-equivalent S8.5 environment was available"
+  }
+}

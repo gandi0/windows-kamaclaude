@@ -512,19 +512,19 @@ Wrapper 模式把职责拆开：
 
 ```mermaid
 sequenceDiagram
-    participant Loop as AgentLoop
-    participant Trace as TracingProvider
-    participant Provider as AnthropicProvider
+    participant AG as AgentLoop
+    participant TR as TracingProvider
+    participant PR as AnthropicProvider
     participant API as Claude API
 
-    Loop->>Trace: chat messages step
-    Trace-->>Trace: emit api_call
-    Trace->>Provider: chat messages step
-    Provider->>API: HTTP request
-    API-->>Provider: model response
-    Provider-->>Trace: LlmResponse
-    Trace-->>Trace: emit api_response
-    Trace-->>Loop: LlmResponse
+    AG->>TR: chat messages step
+    TR-->>TR: emit api_call
+    TR->>PR: chat messages step
+    PR->>API: HTTP request
+    API-->>PR: model response
+    PR-->>TR: LlmResponse
+    TR-->>TR: emit api_response
+    TR-->>AG: LlmResponse
 ```
 
 这样做的结果是：

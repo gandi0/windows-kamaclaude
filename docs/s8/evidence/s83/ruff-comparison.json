@@ -1,0 +1,92 @@
+{
+  "before_count": 42,
+  "after_count": 28,
+  "new": [],
+  "resolved_or_reformatted": [
+    {
+      "file": "src/kama_claude/tui/app.py",
+      "code": "E402",
+      "message": "Module level import not at top of file",
+      "source": "from rich.markdown import Markdown"
+    },
+    {
+      "file": "src/kama_claude/tui/app.py",
+      "code": "E402",
+      "message": "Module level import not at top of file",
+      "source": "from textual import events"
+    },
+    {
+      "file": "src/kama_claude/tui/app.py",
+      "code": "E402",
+      "message": "Module level import not at top of file",
+      "source": "from textual.app import App, ComposeResult"
+    },
+    {
+      "file": "src/kama_claude/tui/app.py",
+      "code": "E402",
+      "message": "Module level import not at top of file",
+      "source": "from textual.binding import Binding"
+    },
+    {
+      "file": "src/kama_claude/tui/app.py",
+      "code": "E402",
+      "message": "Module level import not at top of file",
+      "source": "from textual.containers import VerticalScroll"
+    },
+    {
+      "file": "src/kama_claude/tui/app.py",
+      "code": "E402",
+      "message": "Module level import not at top of file",
+      "source": "from textual.css.query import NoMatches"
+    },
+    {
+      "file": "src/kama_claude/tui/app.py",
+      "code": "E402",
+      "message": "Module level import not at top of file",
+      "source": "from textual.message import Message"
+    },
+    {
+      "file": "src/kama_claude/tui/app.py",
+      "code": "E402",
+      "message": "Module level import not at top of file",
+      "source": "from textual.widget import Widget"
+    },
+    {
+      "file": "src/kama_claude/tui/app.py",
+      "code": "E402",
+      "message": "Module level import not at top of file",
+      "source": "from textual.widgets import Label, Static, TextArea"
+    },
+    {
+      "file": "src/kama_claude/tui/app.py",
+      "code": "E402",
+      "message": "Module level import not at top of file",
+      "source": "from kama_claude.core.config import KamaConfig"
+    },
+    {
+      "file": "src/kama_claude/tui/app.py",
+      "code": "E402",
+      "message": "Module level import not at top of file",
+      "source": "from kama_claude.core.skills.loader import SkillLoader"
+    },
+    {
+      "file": "src/kama_claude/tui/app.py",
+      "code": "E402",
+      "message": "Module level import not at top of file",
+      "source": "from kama_claude.core.transport.socket_client import IpcError, SocketClient"
+    },
+    {
+      "file": "src/kama_claude/tui/app.py",
+      "code": "E501",
+      "message": "Line too long (114 > 100)",
+      "source": "log.debug(\"PermissionSelect mounted before #prompt  pending=%d\", len(self._pending_permission_blocks))"
+    },
+    {
+      "file": "src/kama_claude/tui/app.py",
+      "code": "E501",
+      "message": "Line too long (107 > 100)",
+      "source": "# 处理超时或断连等非用户交互触发的 deny（用户主动 deny 已由 on_permission_select_decided 处理）"
+    }
+  ],
+  "comparison": "code, relative path, message, and source line; no-cache read-only baseline"
+}

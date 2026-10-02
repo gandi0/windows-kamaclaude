@@ -1,0 +1,177 @@
+{
+  "sample_count": 2,
+  "baseline": {
+    "append": {
+      "n": 2,
+      "median_ns": 7240700,
+      "p95_ns": 8002400,
+      "min_ns": 6479000,
+      "max_ns": 8002400
+    },
+    "read": {
+      "n": 2,
+      "median_ns": 236500,
+      "p95_ns": 237300,
+      "min_ns": 235700,
+      "max_ns": 237300
+    },
+    "compaction_commit": {
+      "n": 2,
+      "median_ns": 1134050,
+      "p95_ns": 1156000,
+      "min_ns": 1112100,
+      "max_ns": 1156000
+    },
+    "fake_provider_generation": {
+      "n": 2,
+      "median_ns": 12800,
+      "p95_ns": 15200,
+      "min_ns": 10400,
+      "max_ns": 15200
+    }
+  },
+  "s8": {
+    "append": {
+      "n": 2,
+      "median_ns": 10242400,
+      "p95_ns": 10518900,
+      "min_ns": 9965900,
+      "max_ns": 10518900
+    },
+    "read": {
+      "n": 2,
+      "median_ns": 232550,
+      "p95_ns": 237900,
+      "min_ns": 227200,
+      "max_ns": 237900
+    },
+    "compaction_commit": {
+      "n": 2,
+      "median_ns": 785600,
+      "p95_ns": 788000,
+      "min_ns": 783200,
+      "max_ns": 788000
+    },
+    "fake_provider_generation": {
+      "n": 2,
+      "median_ns": 12850,
+      "p95_ns": 14800,
+      "min_ns": 10900,
+      "max_ns": 14800
+    },
+    "recovery": {
+      "open_ns": {
+        "n": 2,
+        "median_ns": 1559750,
+        "p95_ns": 1579500,
+        "min_ns": 1540000,
+        "max_ns": 1579500
+      },
+      "scan_ns": {
+        "n": 2,
+        "median_ns": 1478550,
+        "p95_ns": 1549900,
+        "min_ns": 1407200,
+        "max_ns": 1549900
+      },
+      "index_ns": {
+        "n": 2,
+        "median_ns": 177800,
+        "p95_ns": 177900,
+        "min_ns": 177700,
+        "max_ns": 177900
+      },
+      "claim_ns": {
+        "n": 2,
+        "median_ns": 1589650,
+        "p95_ns": 1602900,
+        "min_ns": 1576400,
+        "max_ns": 1602900
+      },
+      "continue_to_terminal_ns": {
+        "n": 2,
+        "median_ns": 5662000,
+        "p95_ns": 5909200,
+        "min_ns": 5414800,
+        "max_ns": 5909200
+      },
+      "status_query_ns": {
+        "n": 2,
+        "median_ns": 275650,
+        "p95_ns": 288400,
+        "min_ns": 262900,
+        "max_ns": 288400
+      },
+      "restart_to_query_ready_ns": {
+        "n": 2,
+        "median_ns": 10743400,
+        "p95_ns": 11107800,
+        "min_ns": 10379000,
+        "max_ns": 11107800
+      }
+    }
+  },
+  "persistence_comparison": {
+    "s8_minus_baseline_median_ns": 3001700,
+    "s8_over_baseline_median_ratio": 1.4145593658071733,
+    "warning": "The stores provide different durability and recovery semantics; this ratio is not an end-to-end throughput claim."
+  },
+  "context": {
+    "raw": {
+      "messages": 20,
+      "content_characters": 5180,
+      "canonical_json_bytes": 5811,
+      "estimated_tokens_char_div_4": 1295
+    },
+    "effective": {
+      "messages": 2,
+      "content_characters": 71,
+      "canonical_json_bytes": 135,
+      "estimated_tokens_char_div_4": 17
+    }
+  },
+  "database_growth": {
+    "configured_tool_calls": 2,
+    "row_counts": {
+      "messages": 6,
+      "tool_calls": 2,
+      "attempts": 2,
+      "summaries": 1
+    },
+    "initial": {
+      "execution.sqlite3": 4096,
+      "execution.sqlite3-shm": 32768,
+      "execution.sqlite3-wal": 173072,
+      "__total__": 209936
+    },
+    "after_run": {
+      "execution.sqlite3": 4096,
+      "execution.sqlite3-shm": 32768,
+      "execution.sqlite3-wal": 226632,
+      "__total__": 263496
+    },
+    "after_workload_wal_live": {
+      "execution.sqlite3": 4096,
+      "execution.sqlite3-shm": 32768,
+      "execution.sqlite3-wal": 432632,
+      "__total__": 469496
+    },
+    "after_summary_wal_live": {
+      "execution.sqlite3": 4096,
+      "execution.sqlite3-shm": 32768,
+      "execution.sqlite3-wal": 453232,
+      "__total__": 490096
+    },
+    "wal_checkpoint_result": [
+      0,
+      0,
+      0
+    ],
+    "after_wal_checkpoint_truncate": {
+      "execution.sqlite3": 172032,
+      "execution.sqlite3-shm": 32768,
+      "execution.sqlite3-wal": 0,
+      "__total__": 204800
+    }
+  }
+}

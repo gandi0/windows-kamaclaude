@@ -1,0 +1,13 @@
+[
+  {
+    "check": "s85",
+    "command": [
+      "F:\\exercise\\2026\\kamaclaude - v1\\KamaClaude\\.venv\\Scripts\\python.exe",
+      "scripts/s8/run_s85_matrix.py",
+      "--output",
+      "F:\\exercise\\2026\\kamaclaude - v1\\KamaClaude\\docs\\s8\\evidence\\s85\\matrix-final\\matrix"
+    ],
+    "exit_code": 0,
+    "seconds": 88.609
+  }
+]

@@ -1,0 +1,30 @@
+============================= test session starts =============================
+platform win32 -- Python 3.12.14, pytest-9.1.1, pluggy-1.6.0 -- F:\exercise\2026\kamaclaude - v1\KamaClaude\.venv\Scripts\python.exe
+cachedir: .pytest_cache
+rootdir: F:\exercise\2026\kamaclaude - v1\KamaClaude
+configfile: pyproject.toml
+asyncio: mode=Mode.AUTO, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collecting ... collected 19 items
+
+tests/unit/test_s82_execution.py::test_intent_commit_failure_prevents_tool_execution PASSED [  5%]
+tests/unit/test_s82_execution.py::test_dispatch_commit_failure_prevents_side_effect PASSED [ 10%]
+tests/unit/test_s82_execution.py::test_result_commit_failure_stops_after_one_side_effect PASSED [ 15%]
+tests/integration/test_s83_recovery.py::test_recovery_reuses_committed_result_and_request_identity PASSED [ 21%]
+tests/integration/test_s83_recovery.py::test_unknown_result_stays_reviewable_without_replay PASSED [ 26%]
+tests/unit/test_s82_execution.py::test_final_response_commit_failure_does_not_report_success PASSED [ 31%]
+tests/integration/test_s83_recovery.py::test_restart_invalidates_one_time_approval PASSED [ 36%]
+tests/integration/test_s83_recovery.py::test_workspace_mismatch_blocks_unstarted_write PASSED [ 42%]
+tests/integration/test_s83_recovery.py::test_workspace_file_change_blocks_write PASSED [ 47%]
+tests/integration/test_s83_recovery.py::test_background_child_relationship_survives_restart PASSED [ 52%]
+tests/integration/test_s83_recovery.py::test_completed_child_result_is_queryable_across_runner PASSED [ 57%]
+tests/unit/test_s84_compaction.py::test_summary_insert_fault_rolls_back_pointer PASSED [ 63%]
+tests/unit/test_s84_compaction.py::test_checkpoint_switch_fault_rolls_back_summary PASSED [ 68%]
+tests/unit/test_s84_compaction.py::test_generation_failure_preserves_effective_state PASSED [ 73%]
+tests/unit/test_s84_compaction.py::test_concurrent_messages_remain_after_snapshot PASSED [ 78%]
+tests/integration/test_s83_recovery.py::test_second_daemon_same_profile_is_rejected PASSED [ 84%]
+tests/integration/test_s83_tui_live.py::test_live_tui_resumes_committed_run_after_restart PASSED [ 89%]
+tests/integration/test_s83_tui_live.py::test_live_tui_pauses_unknown_result_with_human_note PASSED [ 94%]
+tests/integration/test_s84_compaction.py::test_daemon_restart_reuses_persisted_manual_summary PASSED [100%]
+
+- generated xml file: C:\Users\moxi\AppData\Local\Temp\kama-s85-matrix-ofhy6h9f\matrix.xml -
+======================== 19 passed in 86.82s (0:01:26) ========================

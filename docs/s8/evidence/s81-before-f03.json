@@ -1,0 +1,20 @@
+{
+  "python": "3.13.0 (tags/v3.13.0:60403a5, Oct  7 2024, 09:38:07) [MSC v.1941 64 bit (AMD64)]",
+  "os": "win32",
+  "results": [
+    {
+      "case": "F03",
+      "reproduced": true,
+      "actual": {
+        "direct_count": 1,
+        "invoke_count": 3,
+        "attempts": [
+          1,
+          2,
+          3
+        ],
+        "shell": "cmd.exe"
+      }
+    }
+  ]
+}

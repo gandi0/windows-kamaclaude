@@ -1,0 +1,704 @@
+{
+  "schema_version": 1,
+  "method": {
+    "baseline_commit": "cc352fe653c26ab763838899785b6bdd6575f0c0",
+    "s8_head": "cc352fe653c26ab763838899785b6bdd6575f0c0",
+    "s8_worktree_dirty": true,
+    "python": "3.12.14 (main, Sep  1 2026, 14:17:39) [MSC v.1944 64 bit (AMD64)]",
+    "platform": "Windows-11-10.0.26100-SP0",
+    "clock": "time.perf_counter_ns",
+    "warmup": 3,
+    "samples": 15,
+    "messages": 200,
+    "provider": "fixed in-process fake; no network",
+    "token_estimate": "sum(len(str(message.content))) // 4",
+    "recovery_trigger": "explicit resume; unattended restart continuation is not implemented"
+  },
+  "baseline": {
+    "variant": "baseline",
+    "workload": {
+      "messages": 200,
+      "payload_characters": 254
+    },
+    "persistence_samples": [
+      {
+        "sample": 1,
+        "append_ns": 49522300,
+        "read_ns": 588700,
+        "bytes_before_compaction": 72875
+      },
+      {
+        "sample": 2,
+        "append_ns": 53279900,
+        "read_ns": 657900,
+        "bytes_before_compaction": 72875
+      },
+      {
+        "sample": 3,
+        "append_ns": 50631100,
+        "read_ns": 585300,
+        "bytes_before_compaction": 72875
+      },
+      {
+        "sample": 4,
+        "append_ns": 52411300,
+        "read_ns": 584100,
+        "bytes_before_compaction": 72875
+      },
+      {
+        "sample": 5,
+        "append_ns": 48484300,
+        "read_ns": 605600,
+        "bytes_before_compaction": 72875
+      },
+      {
+        "sample": 6,
+        "append_ns": 50762100,
+        "read_ns": 591100,
+        "bytes_before_compaction": 72875
+      },
+      {
+        "sample": 7,
+        "append_ns": 51620700,
+        "read_ns": 718000,
+        "bytes_before_compaction": 72875
+      },
+      {
+        "sample": 8,
+        "append_ns": 50416800,
+        "read_ns": 630800,
+        "bytes_before_compaction": 72875
+      },
+      {
+        "sample": 9,
+        "append_ns": 49917700,
+        "read_ns": 589000,
+        "bytes_before_compaction": 72875
+      },
+      {
+        "sample": 10,
+        "append_ns": 50733800,
+        "read_ns": 606300,
+        "bytes_before_compaction": 72875
+      },
+      {
+        "sample": 11,
+        "append_ns": 51531700,
+        "read_ns": 578900,
+        "bytes_before_compaction": 72875
+      },
+      {
+        "sample": 12,
+        "append_ns": 49090500,
+        "read_ns": 574700,
+        "bytes_before_compaction": 72875
+      },
+      {
+        "sample": 13,
+        "append_ns": 51267500,
+        "read_ns": 592400,
+        "bytes_before_compaction": 72875
+      },
+      {
+        "sample": 14,
+        "append_ns": 51410300,
+        "read_ns": 575600,
+        "bytes_before_compaction": 72875
+      },
+      {
+        "sample": 15,
+        "append_ns": 50777200,
+        "read_ns": 674200,
+        "bytes_before_compaction": 72875
+      }
+    ],
+    "compaction_commit_samples": [
+      {
+        "sample": 1,
+        "commit_ns": 1153000,
+        "bytes_after_compaction": 73083
+      },
+      {
+        "sample": 2,
+        "commit_ns": 873300,
+        "bytes_after_compaction": 73083
+      },
+      {
+        "sample": 3,
+        "commit_ns": 803500,
+        "bytes_after_compaction": 73083
+      },
+      {
+        "sample": 4,
+        "commit_ns": 833600,
+        "bytes_after_compaction": 73083
+      },
+      {
+        "sample": 5,
+        "commit_ns": 764100,
+        "bytes_after_compaction": 73083
+      },
+      {
+        "sample": 6,
+        "commit_ns": 746700,
+        "bytes_after_compaction": 73083
+      },
+      {
+        "sample": 7,
+        "commit_ns": 896000,
+        "bytes_after_compaction": 73083
+      },
+      {
+        "sample": 8,
+        "commit_ns": 782000,
+        "bytes_after_compaction": 73083
+      },
+      {
+        "sample": 9,
+        "commit_ns": 749200,
+        "bytes_after_compaction": 73083
+      },
+      {
+        "sample": 10,
+        "commit_ns": 1123000,
+        "bytes_after_compaction": 73083
+      },
+      {
+        "sample": 11,
+        "commit_ns": 770100,
+        "bytes_after_compaction": 73083
+      },
+      {
+        "sample": 12,
+        "commit_ns": 806300,
+        "bytes_after_compaction": 73083
+      },
+      {
+        "sample": 13,
+        "commit_ns": 854500,
+        "bytes_after_compaction": 73083
+      },
+      {
+        "sample": 14,
+        "commit_ns": 803900,
+        "bytes_after_compaction": 73083
+      },
+      {
+        "sample": 15,
+        "commit_ns": 772300,
+        "bytes_after_compaction": 73083
+      }
+    ],
+    "context": null,
+    "provider_generation_samples": [
+      {
+        "sample": 1,
+        "provider_generation_ns": 52800
+      },
+      {
+        "sample": 2,
+        "provider_generation_ns": 53400
+      },
+      {
+        "sample": 3,
+        "provider_generation_ns": 52700
+      },
+      {
+        "sample": 4,
+        "provider_generation_ns": 52700
+      },
+      {
+        "sample": 5,
+        "provider_generation_ns": 52600
+      },
+      {
+        "sample": 6,
+        "provider_generation_ns": 52600
+      },
+      {
+        "sample": 7,
+        "provider_generation_ns": 52400
+      },
+      {
+        "sample": 8,
+        "provider_generation_ns": 52300
+      },
+      {
+        "sample": 9,
+        "provider_generation_ns": 54400
+      },
+      {
+        "sample": 10,
+        "provider_generation_ns": 52500
+      },
+      {
+        "sample": 11,
+        "provider_generation_ns": 52800
+      },
+      {
+        "sample": 12,
+        "provider_generation_ns": 52700
+      },
+      {
+        "sample": 13,
+        "provider_generation_ns": 52500
+      },
+      {
+        "sample": 14,
+        "provider_generation_ns": 53300
+      },
+      {
+        "sample": 15,
+        "provider_generation_ns": 57000
+      }
+    ]
+  },
+  "s8": {
+    "variant": "s8",
+    "workload": {
+      "messages": 200,
+      "payload_characters": 254
+    },
+    "persistence_samples": [
+      {
+        "sample": 1,
+        "append_ns": 113604200,
+        "read_ns": 1055900,
+        "bytes_before_compaction": 3707816
+      },
+      {
+        "sample": 2,
+        "append_ns": 104059800,
+        "read_ns": 1025200,
+        "bytes_before_compaction": 3699576
+      },
+      {
+        "sample": 3,
+        "append_ns": 124260300,
+        "read_ns": 1052300,
+        "bytes_before_compaction": 3707816
+      },
+      {
+        "sample": 4,
+        "append_ns": 104712500,
+        "read_ns": 1052000,
+        "bytes_before_compaction": 3707816
+      },
+      {
+        "sample": 5,
+        "append_ns": 112436300,
+        "read_ns": 1196200,
+        "bytes_before_compaction": 3707816
+      },
+      {
+        "sample": 6,
+        "append_ns": 127414400,
+        "read_ns": 1044000,
+        "bytes_before_compaction": 3707816
+      },
+      {
+        "sample": 7,
+        "append_ns": 120346200,
+        "read_ns": 1041000,
+        "bytes_before_compaction": 3699576
+      },
+      {
+        "sample": 8,
+        "append_ns": 136738400,
+        "read_ns": 1954300,
+        "bytes_before_compaction": 3707816
+      },
+      {
+        "sample": 9,
+        "append_ns": 132072300,
+        "read_ns": 1759200,
+        "bytes_before_compaction": 3699576
+      },
+      {
+        "sample": 10,
+        "append_ns": 148430400,
+        "read_ns": 1518900,
+        "bytes_before_compaction": 3707816
+      },
+      {
+        "sample": 11,
+        "append_ns": 125537200,
+        "read_ns": 1257400,
+        "bytes_before_compaction": 3707816
+      },
+      {
+        "sample": 12,
+        "append_ns": 135585000,
+        "read_ns": 1199700,
+        "bytes_before_compaction": 3699576
+      },
+      {
+        "sample": 13,
+        "append_ns": 144443900,
+        "read_ns": 1631700,
+        "bytes_before_compaction": 3707816
+      },
+      {
+        "sample": 14,
+        "append_ns": 121328000,
+        "read_ns": 1077500,
+        "bytes_before_compaction": 3707816
+      },
+      {
+        "sample": 15,
+        "append_ns": 125055400,
+        "read_ns": 1590100,
+        "bytes_before_compaction": 3699576
+      }
+    ],
+    "compaction_commit_samples": [
+      {
+        "sample": 1,
+        "commit_ns": 2307400,
+        "bytes_after_compaction": 4039928
+      },
+      {
+        "sample": 2,
+        "commit_ns": 2031900,
+        "bytes_after_compaction": 4031688
+      },
+      {
+        "sample": 3,
+        "commit_ns": 1898700,
+        "bytes_after_compaction": 4039928
+      },
+      {
+        "sample": 4,
+        "commit_ns": 2724700,
+        "bytes_after_compaction": 4031688
+      },
+      {
+        "sample": 5,
+        "commit_ns": 2895800,
+        "bytes_after_compaction": 4039928
+      },
+      {
+        "sample": 6,
+        "commit_ns": 2609000,
+        "bytes_after_compaction": 4031688
+      },
+      {
+        "sample": 7,
+        "commit_ns": 2374300,
+        "bytes_after_compaction": 4039928
+      },
+      {
+        "sample": 8,
+        "commit_ns": 2171500,
+        "bytes_after_compaction": 4031688
+      },
+      {
+        "sample": 9,
+        "commit_ns": 2951100,
+        "bytes_after_compaction": 4031688
+      },
+      {
+        "sample": 10,
+        "commit_ns": 3172500,
+        "bytes_after_compaction": 4039928
+      },
+      {
+        "sample": 11,
+        "commit_ns": 1863100,
+        "bytes_after_compaction": 4039928
+      },
+      {
+        "sample": 12,
+        "commit_ns": 2884100,
+        "bytes_after_compaction": 4039928
+      },
+      {
+        "sample": 13,
+        "commit_ns": 2070000,
+        "bytes_after_compaction": 4039928
+      },
+      {
+        "sample": 14,
+        "commit_ns": 2528700,
+        "bytes_after_compaction": 4039928
+      },
+      {
+        "sample": 15,
+        "commit_ns": 2249000,
+        "bytes_after_compaction": 4039928
+      }
+    ],
+    "context": {
+      "raw": {
+        "messages": 200,
+        "content_characters": 51800,
+        "canonical_json_bytes": 58101,
+        "estimated_tokens_char_div_4": 12950
+      },
+      "effective": {
+        "messages": 2,
+        "content_characters": 71,
+        "canonical_json_bytes": 135,
+        "estimated_tokens_char_div_4": 17
+      }
+    },
+    "provider_generation_samples": [
+      {
+        "sample": 1,
+        "provider_generation_ns": 76900
+      },
+      {
+        "sample": 2,
+        "provider_generation_ns": 74000
+      },
+      {
+        "sample": 3,
+        "provider_generation_ns": 55800
+      },
+      {
+        "sample": 4,
+        "provider_generation_ns": 143300
+      },
+      {
+        "sample": 5,
+        "provider_generation_ns": 96800
+      },
+      {
+        "sample": 6,
+        "provider_generation_ns": 89200
+      },
+      {
+        "sample": 7,
+        "provider_generation_ns": 88000
+      },
+      {
+        "sample": 8,
+        "provider_generation_ns": 128500
+      },
+      {
+        "sample": 9,
+        "provider_generation_ns": 62700
+      },
+      {
+        "sample": 10,
+        "provider_generation_ns": 54100
+      },
+      {
+        "sample": 11,
+        "provider_generation_ns": 69300
+      },
+      {
+        "sample": 12,
+        "provider_generation_ns": 53500
+      },
+      {
+        "sample": 13,
+        "provider_generation_ns": 58600
+      },
+      {
+        "sample": 14,
+        "provider_generation_ns": 150000
+      },
+      {
+        "sample": 15,
+        "provider_generation_ns": 134600
+      }
+    ],
+    "recovery_samples": [
+      {
+        "sample": 1,
+        "open_ns": 3023800,
+        "scan_ns": 2086700,
+        "index_ns": 525200,
+        "claim_ns": 4255300,
+        "continue_to_terminal_ns": 9623900,
+        "status_query_ns": 465000,
+        "restart_to_query_ready_ns": 19979900
+      },
+      {
+        "sample": 2,
+        "open_ns": 2071800,
+        "scan_ns": 1832900,
+        "index_ns": 359800,
+        "claim_ns": 3286400,
+        "continue_to_terminal_ns": 9603000,
+        "status_query_ns": 501800,
+        "restart_to_query_ready_ns": 17655700
+      },
+      {
+        "sample": 3,
+        "open_ns": 3198600,
+        "scan_ns": 2904800,
+        "index_ns": 213500,
+        "claim_ns": 1986600,
+        "continue_to_terminal_ns": 10323100,
+        "status_query_ns": 632700,
+        "restart_to_query_ready_ns": 19259300
+      },
+      {
+        "sample": 4,
+        "open_ns": 3136400,
+        "scan_ns": 2452200,
+        "index_ns": 305700,
+        "claim_ns": 2708400,
+        "continue_to_terminal_ns": 8476900,
+        "status_query_ns": 522000,
+        "restart_to_query_ready_ns": 17601600
+      },
+      {
+        "sample": 5,
+        "open_ns": 2232200,
+        "scan_ns": 1698200,
+        "index_ns": 194400,
+        "claim_ns": 1707300,
+        "continue_to_terminal_ns": 8619900,
+        "status_query_ns": 541600,
+        "restart_to_query_ready_ns": 14993600
+      },
+      {
+        "sample": 6,
+        "open_ns": 2898800,
+        "scan_ns": 2118600,
+        "index_ns": 299500,
+        "claim_ns": 2671900,
+        "continue_to_terminal_ns": 6323400,
+        "status_query_ns": 302500,
+        "restart_to_query_ready_ns": 14614700
+      },
+      {
+        "sample": 7,
+        "open_ns": 2075600,
+        "scan_ns": 2566700,
+        "index_ns": 205900,
+        "claim_ns": 2389300,
+        "continue_to_terminal_ns": 10229300,
+        "status_query_ns": 310600,
+        "restart_to_query_ready_ns": 17777400
+      },
+      {
+        "sample": 8,
+        "open_ns": 3020700,
+        "scan_ns": 2191900,
+        "index_ns": 332100,
+        "claim_ns": 3359500,
+        "continue_to_terminal_ns": 9854000,
+        "status_query_ns": 493900,
+        "restart_to_query_ready_ns": 19252100
+      },
+      {
+        "sample": 9,
+        "open_ns": 3281500,
+        "scan_ns": 2326500,
+        "index_ns": 312800,
+        "claim_ns": 4405000,
+        "continue_to_terminal_ns": 9270500,
+        "status_query_ns": 615600,
+        "restart_to_query_ready_ns": 20211900
+      },
+      {
+        "sample": 10,
+        "open_ns": 3713600,
+        "scan_ns": 2270700,
+        "index_ns": 341000,
+        "claim_ns": 3193600,
+        "continue_to_terminal_ns": 7255200,
+        "status_query_ns": 404900,
+        "restart_to_query_ready_ns": 17179000
+      },
+      {
+        "sample": 11,
+        "open_ns": 2865500,
+        "scan_ns": 2046200,
+        "index_ns": 348900,
+        "claim_ns": 3457000,
+        "continue_to_terminal_ns": 8811500,
+        "status_query_ns": 458100,
+        "restart_to_query_ready_ns": 17987200
+      },
+      {
+        "sample": 12,
+        "open_ns": 1983000,
+        "scan_ns": 1529200,
+        "index_ns": 189300,
+        "claim_ns": 1722800,
+        "continue_to_terminal_ns": 5816600,
+        "status_query_ns": 294400,
+        "restart_to_query_ready_ns": 11535300
+      },
+      {
+        "sample": 13,
+        "open_ns": 2130600,
+        "scan_ns": 2570200,
+        "index_ns": 298900,
+        "claim_ns": 2847300,
+        "continue_to_terminal_ns": 10074000,
+        "status_query_ns": 434700,
+        "restart_to_query_ready_ns": 18355700
+      },
+      {
+        "sample": 14,
+        "open_ns": 1957800,
+        "scan_ns": 2304800,
+        "index_ns": 339300,
+        "claim_ns": 2940900,
+        "continue_to_terminal_ns": 7366300,
+        "status_query_ns": 445300,
+        "restart_to_query_ready_ns": 15354400
+      },
+      {
+        "sample": 15,
+        "open_ns": 2045200,
+        "scan_ns": 1811700,
+        "index_ns": 290500,
+        "claim_ns": 3276500,
+        "continue_to_terminal_ns": 6144400,
+        "status_query_ns": 279900,
+        "restart_to_query_ready_ns": 13848200
+      }
+    ],
+    "database_growth": {
+      "configured_tool_calls": 20,
+      "row_counts": {
+        "messages": 42,
+        "tool_calls": 20,
+        "attempts": 20,
+        "summaries": 1
+      },
+      "initial": {
+        "execution.sqlite3": 4096,
+        "execution.sqlite3-shm": 32768,
+        "execution.sqlite3-wal": 173072,
+        "__total__": 209936
+      },
+      "after_run": {
+        "execution.sqlite3": 4096,
+        "execution.sqlite3-shm": 32768,
+        "execution.sqlite3-wal": 226632,
+        "__total__": 263496
+      },
+      "after_workload_wal_live": {
+        "execution.sqlite3": 4096,
+        "execution.sqlite3-shm": 32768,
+        "execution.sqlite3-wal": 2138312,
+        "__total__": 2175176
+      },
+      "after_summary_wal_live": {
+        "execution.sqlite3": 4096,
+        "execution.sqlite3-shm": 32768,
+        "execution.sqlite3-wal": 2158912,
+        "__total__": 2195776
+      },
+      "wal_checkpoint_result": [
+        0,
+        0,
+        0
+      ],
+      "after_wal_checkpoint_truncate": {
+        "execution.sqlite3": 208896,
+        "execution.sqlite3-shm": 32768,
+        "execution.sqlite3-wal": 0,
+        "__total__": 241664
+      }
+    }
+  }
+}

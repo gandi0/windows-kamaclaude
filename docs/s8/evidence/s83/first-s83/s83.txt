@@ -1,0 +1,33 @@
+{"check": "s83", "command": ["F:\\exercise\\2026\\kamaclaude - v1\\KamaClaude\\.venv\\Scripts\\python.exe", "-m", "pytest", "tests/unit/test_s83_store.py", "tests/unit/test_s83_execution.py", "tests/unit/test_s83_tui.py", "-v", "--tb=short", "--basetemp", "C:\\Users\\moxi\\AppData\\Local\\Temp\\kama-s8-s83-octlvl56\\pytest"], "exit_code": 0, "seconds": 5.61}
+============================= test session starts =============================
+platform win32 -- Python 3.12.14, pytest-9.1.1, pluggy-1.6.0 -- F:\exercise\2026\kamaclaude - v1\KamaClaude\.venv\Scripts\python.exe
+cachedir: .pytest_cache
+rootdir: F:\wend\ChatGPT\kamaclaude优化\.s83-work\main
+configfile: pyproject.toml
+asyncio: mode=Mode.AUTO, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collecting ... collected 22 items
+
+tests/unit/test_s83_store.py::test_v1_migration_preserves_facts PASSED   [  4%]
+tests/unit/test_s83_store.py::test_request_id_dedup_and_conflict PASSED  [  9%]
+tests/unit/test_s83_store.py::test_claim_run_is_single_winner PASSED     [ 13%]
+tests/unit/test_s83_store.py::test_daemon_scan_preserves_unknown_and_result PASSED [ 18%]
+tests/unit/test_s83_store.py::test_workspace_file_conflict_blocks_recovery PASSED [ 22%]
+tests/unit/test_s83_store.py::test_workspace_guard_uses_cumulative_last_state PASSED [ 27%]
+tests/unit/test_s83_store.py::test_workspace_junction_replacement_blocks_claim PASSED [ 31%]
+tests/unit/test_s83_store.py::test_approval_epoch_and_consume PASSED     [ 36%]
+tests/unit/test_s83_store.py::test_child_relationship_and_recovery_visibility PASSED [ 40%]
+tests/unit/test_s83_store.py::test_daemon_lock_cross_process PASSED      [ 45%]
+tests/unit/test_s83_execution.py::test_resume_partial_batch_reuses_committed_call PASSED [ 50%]
+tests/unit/test_s83_execution.py::test_resume_never_dispatches_incomplete_model_output PASSED [ 54%]
+tests/unit/test_s83_execution.py::test_old_approval_token_cannot_authorize_new_epoch PASSED [ 59%]
+tests/unit/test_s83_execution.py::test_child_result_survives_new_registry PASSED [ 63%]
+tests/unit/test_s83_execution.py::test_index_keeps_incomplete_legacy_metadata_visible PASSED [ 68%]
+tests/unit/test_s83_tui.py::test_pilot_session_select_loads_history PASSED [ 72%]
+tests/unit/test_s83_tui.py::test_pilot_resume_sends_workspace_and_run PASSED [ 77%]
+tests/unit/test_s83_tui.py::test_resume_response_does_not_overwrite_early_terminal_event PASSED [ 81%]
+tests/unit/test_s83_tui.py::test_pilot_needs_review_shows_complete_call_details PASSED [ 86%]
+tests/unit/test_s83_tui.py::test_pilot_review_pause_and_abandon_require_note PASSED [ 90%]
+tests/unit/test_s83_tui.py::test_request_id_is_stable_across_transport_retry PASSED [ 95%]
+tests/unit/test_s83_tui.py::test_permission_response_forwards_approval_identity PASSED [100%]
+
+============================= 22 passed in 4.60s ==============================

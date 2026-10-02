@@ -1,0 +1,11 @@
+[
+  {
+    "check": "s82-crash",
+    "command": [
+      "F:\\exercise\\2026\\kamaclaude - v1\\KamaClaude\\.venv\\Scripts\\python.exe",
+      "scripts/s8/probe_s82.py"
+    ],
+    "exit_code": 0,
+    "seconds": 8.687
+  }
+]

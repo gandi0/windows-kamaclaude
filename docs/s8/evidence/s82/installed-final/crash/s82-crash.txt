@@ -1,0 +1,549 @@
+{"check": "s82-crash", "command": ["F:\\exercise\\2026\\kamaclaude - v1\\KamaClaude\\.venv\\Scripts\\python.exe", "scripts/s8/probe_s82.py"], "exit_code": 0, "seconds": 9.312}
+{
+  "python": "3.12.14 (main, Sep  1 2026, 14:17:39) [MSC v.1944 64 bit (AMD64)]",
+  "executable": "F:\\exercise\\2026\\kamaclaude - v1\\KamaClaude\\.venv\\Scripts\\python.exe",
+  "scope": "hard-exit transaction probes; no daemon recovery or model API",
+  "observations": [
+    {
+      "mode": "intent_before",
+      "exit_code": 81,
+      "marker": null,
+      "messages": [
+        {
+          "id": "e975189f3f3548c09eeff3b90b84d8ef",
+          "seq": 1,
+          "role": "user",
+          "content": "write marker",
+          "run_id": "probe-run",
+          "source": "native"
+        }
+      ],
+      "call": null,
+      "attempts": [],
+      "checkpoint": {
+        "run_id": "probe-run",
+        "version": 1,
+        "seq": 1,
+        "message_seq": 1,
+        "step": 0,
+        "status": "running",
+        "reason": null,
+        "pending": [],
+        "pending_calls": [],
+        "pending_call_ids": [],
+        "next_action": "model",
+        "summary_ref": null,
+        "summary_from": null,
+        "summary_to": null,
+        "updated_at": "2026-09-23T13:55:11.709404+00:00"
+      },
+      "run": {
+        "run_id": "probe-run",
+        "id": "probe-run",
+        "session_id": "sess-4857798ec18d",
+        "parent_run_id": null,
+        "workspace": "C:\\Users\\moxi\\AppData\\Local\\Temp\\kama-s82-crash-_4h3bncq\\intent_before",
+        "status": "running",
+        "reason": null,
+        "step": 0,
+        "created_at": "2026-09-23T13:55:11.709404+00:00",
+        "updated_at": "2026-09-23T13:55:11.709404+00:00"
+      },
+      "verified": true
+    },
+    {
+      "mode": "dispatch_before",
+      "exit_code": 82,
+      "marker": null,
+      "messages": [
+        {
+          "id": "db0fa6d734684ecc9e16a39a58ecd46d",
+          "seq": 1,
+          "role": "user",
+          "content": "write marker",
+          "run_id": "probe-run",
+          "source": "native"
+        },
+        {
+          "id": "707b48e9676b4c08a91f6744409626e6",
+          "seq": 2,
+          "role": "assistant",
+          "content": [
+            {
+              "id": "model-tool-id",
+              "input": {
+                "content": "effect",
+                "path": "marker.txt"
+              },
+              "name": "write_file",
+              "type": "tool_use"
+            }
+          ],
+          "run_id": "probe-run",
+          "source": "native"
+        }
+      ],
+      "call": {
+        "call_id": "2dcc305d68e64d5ca6239c3346f15a82",
+        "session_id": "sess-eff79a7aceeb",
+        "run_id": "probe-run",
+        "step": 1,
+        "ordinal": 0,
+        "tool_use_id": "model-tool-id",
+        "name": "write_file",
+        "input": {
+          "content": "effect",
+          "path": "marker.txt"
+        },
+        "params_hash": "2b245ec61b450102d17b5d9736cf33df8f9bc5f6bb406ae1e40f6fc071f130e9",
+        "input_hash": "2b245ec61b450102d17b5d9736cf33df8f9bc5f6bb406ae1e40f6fc071f130e9",
+        "effect": "write",
+        "retry_safe": false,
+        "workspace": "C:\\Users\\moxi\\AppData\\Local\\Temp\\kama-s82-crash-_4h3bncq\\dispatch_before",
+        "status": "planned",
+        "result": null,
+        "created_at": "2026-09-23T13:55:13.331730+00:00",
+        "updated_at": "2026-09-23T13:55:13.331730+00:00"
+      },
+      "attempts": [],
+      "checkpoint": {
+        "run_id": "probe-run",
+        "version": 2,
+        "seq": 2,
+        "message_seq": 2,
+        "step": 1,
+        "status": "running",
+        "reason": null,
+        "pending": [
+          "2dcc305d68e64d5ca6239c3346f15a82"
+        ],
+        "pending_calls": [
+          "2dcc305d68e64d5ca6239c3346f15a82"
+        ],
+        "pending_call_ids": [
+          "2dcc305d68e64d5ca6239c3346f15a82"
+        ],
+        "next_action": "dispatch",
+        "summary_ref": null,
+        "summary_from": null,
+        "summary_to": null,
+        "updated_at": "2026-09-23T13:55:13.331730+00:00"
+      },
+      "run": {
+        "run_id": "probe-run",
+        "id": "probe-run",
+        "session_id": "sess-eff79a7aceeb",
+        "parent_run_id": null,
+        "workspace": "C:\\Users\\moxi\\AppData\\Local\\Temp\\kama-s82-crash-_4h3bncq\\dispatch_before",
+        "status": "running",
+        "reason": null,
+        "step": 1,
+        "created_at": "2026-09-23T13:55:13.326806+00:00",
+        "updated_at": "2026-09-23T13:55:13.331730+00:00"
+      },
+      "verified": true
+    },
+    {
+      "mode": "result_before",
+      "exit_code": 83,
+      "marker": "effect",
+      "messages": [
+        {
+          "id": "3c0c28e79c6943d99829deba205ba346",
+          "seq": 1,
+          "role": "user",
+          "content": "write marker",
+          "run_id": "probe-run",
+          "source": "native"
+        },
+        {
+          "id": "66a9fb5879714b86a5bbca356ee12db5",
+          "seq": 2,
+          "role": "assistant",
+          "content": [
+            {
+              "id": "model-tool-id",
+              "input": {
+                "content": "effect",
+                "path": "marker.txt"
+              },
+              "name": "write_file",
+              "type": "tool_use"
+            }
+          ],
+          "run_id": "probe-run",
+          "source": "native"
+        }
+      ],
+      "call": {
+        "call_id": "a8dc5bfdb48a4e01bb9d07e4e8b9e32f",
+        "session_id": "sess-6b7960ef820c",
+        "run_id": "probe-run",
+        "step": 1,
+        "ordinal": 0,
+        "tool_use_id": "model-tool-id",
+        "name": "write_file",
+        "input": {
+          "content": "effect",
+          "path": "marker.txt"
+        },
+        "params_hash": "2b245ec61b450102d17b5d9736cf33df8f9bc5f6bb406ae1e40f6fc071f130e9",
+        "input_hash": "2b245ec61b450102d17b5d9736cf33df8f9bc5f6bb406ae1e40f6fc071f130e9",
+        "effect": "write",
+        "retry_safe": false,
+        "workspace": "C:\\Users\\moxi\\AppData\\Local\\Temp\\kama-s82-crash-_4h3bncq\\result_before",
+        "status": "dispatching",
+        "result": null,
+        "created_at": "2026-09-23T13:55:14.747035+00:00",
+        "updated_at": "2026-09-23T13:55:14.748266+00:00"
+      },
+      "attempts": [
+        {
+          "attempt_id": "f5b78ad1fc4e43f8907b0370276f1844",
+          "call_id": "a8dc5bfdb48a4e01bb9d07e4e8b9e32f",
+          "number": 1,
+          "attempt_no": 1,
+          "phase": "dispatching",
+          "outcome": null,
+          "error_type": null,
+          "cleanup_confirmed": null,
+          "result": null,
+          "started_at": "2026-09-23T13:55:14.748266+00:00",
+          "finished_at": null
+        }
+      ],
+      "checkpoint": {
+        "run_id": "probe-run",
+        "version": 3,
+        "seq": 2,
+        "message_seq": 2,
+        "step": 1,
+        "status": "running",
+        "reason": null,
+        "pending": [
+          "a8dc5bfdb48a4e01bb9d07e4e8b9e32f"
+        ],
+        "pending_calls": [
+          "a8dc5bfdb48a4e01bb9d07e4e8b9e32f"
+        ],
+        "pending_call_ids": [
+          "a8dc5bfdb48a4e01bb9d07e4e8b9e32f"
+        ],
+        "next_action": "await_result",
+        "summary_ref": null,
+        "summary_from": null,
+        "summary_to": null,
+        "updated_at": "2026-09-23T13:55:14.748588+00:00"
+      },
+      "run": {
+        "run_id": "probe-run",
+        "id": "probe-run",
+        "session_id": "sess-6b7960ef820c",
+        "parent_run_id": null,
+        "workspace": "C:\\Users\\moxi\\AppData\\Local\\Temp\\kama-s82-crash-_4h3bncq\\result_before",
+        "status": "running",
+        "reason": null,
+        "step": 1,
+        "created_at": "2026-09-23T13:55:14.741794+00:00",
+        "updated_at": "2026-09-23T13:55:14.747504+00:00"
+      },
+      "verified": true
+    },
+    {
+      "mode": "result_after",
+      "exit_code": 84,
+      "marker": "effect",
+      "messages": [
+        {
+          "id": "6496bf7765f14543a6e0125952a2835d",
+          "seq": 1,
+          "role": "user",
+          "content": "write marker",
+          "run_id": "probe-run",
+          "source": "native"
+        },
+        {
+          "id": "5ceb7790536546bf9d3f25646a62522e",
+          "seq": 2,
+          "role": "assistant",
+          "content": [
+            {
+              "id": "model-tool-id",
+              "input": {
+                "content": "effect",
+                "path": "marker.txt"
+              },
+              "name": "write_file",
+              "type": "tool_use"
+            }
+          ],
+          "run_id": "probe-run",
+          "source": "native"
+        },
+        {
+          "id": "98e4256f52b94763b41a2ee394eb5f16",
+          "seq": 3,
+          "role": "user",
+          "content": [
+            {
+              "content": "wrote 6 bytes to marker.txt",
+              "tool_use_id": "model-tool-id",
+              "type": "tool_result"
+            }
+          ],
+          "run_id": "probe-run",
+          "source": "native"
+        }
+      ],
+      "call": {
+        "call_id": "d8d9bfcfe20141d381b986267ae6f3b5",
+        "session_id": "sess-76a721ed73c8",
+        "run_id": "probe-run",
+        "step": 1,
+        "ordinal": 0,
+        "tool_use_id": "model-tool-id",
+        "name": "write_file",
+        "input": {
+          "content": "effect",
+          "path": "marker.txt"
+        },
+        "params_hash": "2b245ec61b450102d17b5d9736cf33df8f9bc5f6bb406ae1e40f6fc071f130e9",
+        "input_hash": "2b245ec61b450102d17b5d9736cf33df8f9bc5f6bb406ae1e40f6fc071f130e9",
+        "effect": "write",
+        "retry_safe": false,
+        "workspace": "C:\\Users\\moxi\\AppData\\Local\\Temp\\kama-s82-crash-_4h3bncq\\result_after",
+        "status": "succeeded",
+        "result": {
+          "attempts": [
+            {
+              "attempt_id": "bb50f6e715f04d59aaab6bdca6d1de45",
+              "cleanup_confirmed": null,
+              "error_type": null,
+              "number": 1,
+              "outcome": "known"
+            }
+          ],
+          "call_id": "d8d9bfcfe20141d381b986267ae6f3b5",
+          "cleanup_confirmed": null,
+          "content": "wrote 6 bytes to marker.txt",
+          "error_type": null,
+          "is_error": false,
+          "outcome": "known",
+          "transient": false
+        },
+        "created_at": "2026-09-23T13:55:16.151532+00:00",
+        "updated_at": "2026-09-23T13:55:16.155119+00:00"
+      },
+      "attempts": [
+        {
+          "attempt_id": "bb50f6e715f04d59aaab6bdca6d1de45",
+          "call_id": "d8d9bfcfe20141d381b986267ae6f3b5",
+          "number": 1,
+          "attempt_no": 1,
+          "phase": "result_committed",
+          "outcome": "known",
+          "error_type": null,
+          "cleanup_confirmed": null,
+          "result": {
+            "attempts": [
+              {
+                "attempt_id": "bb50f6e715f04d59aaab6bdca6d1de45",
+                "cleanup_confirmed": null,
+                "error_type": null,
+                "number": 1,
+                "outcome": "known"
+              }
+            ],
+            "call_id": "d8d9bfcfe20141d381b986267ae6f3b5",
+            "cleanup_confirmed": null,
+            "content": "wrote 6 bytes to marker.txt",
+            "error_type": null,
+            "is_error": false,
+            "outcome": "known",
+            "transient": false
+          },
+          "started_at": "2026-09-23T13:55:16.154117+00:00",
+          "finished_at": "2026-09-23T13:55:16.155119+00:00"
+        }
+      ],
+      "checkpoint": {
+        "run_id": "probe-run",
+        "version": 4,
+        "seq": 3,
+        "message_seq": 3,
+        "step": 1,
+        "status": "running",
+        "reason": null,
+        "pending": [],
+        "pending_calls": [],
+        "pending_call_ids": [],
+        "next_action": "model",
+        "summary_ref": null,
+        "summary_from": null,
+        "summary_to": null,
+        "updated_at": "2026-09-23T13:55:16.155119+00:00"
+      },
+      "run": {
+        "run_id": "probe-run",
+        "id": "probe-run",
+        "session_id": "sess-76a721ed73c8",
+        "parent_run_id": null,
+        "workspace": "C:\\Users\\moxi\\AppData\\Local\\Temp\\kama-s82-crash-_4h3bncq\\result_after",
+        "status": "running",
+        "reason": null,
+        "step": 1,
+        "created_at": "2026-09-23T13:55:16.146990+00:00",
+        "updated_at": "2026-09-23T13:55:16.151532+00:00"
+      },
+      "verified": true
+    },
+    {
+      "mode": "final_before",
+      "exit_code": 85,
+      "marker": "effect",
+      "messages": [
+        {
+          "id": "e8b7178404b048b0a59640c35f4ac205",
+          "seq": 1,
+          "role": "user",
+          "content": "write marker",
+          "run_id": "probe-run",
+          "source": "native"
+        },
+        {
+          "id": "6af771c316294f54a7fd2b9003299790",
+          "seq": 2,
+          "role": "assistant",
+          "content": [
+            {
+              "id": "model-tool-id",
+              "input": {
+                "content": "effect",
+                "path": "marker.txt"
+              },
+              "name": "write_file",
+              "type": "tool_use"
+            }
+          ],
+          "run_id": "probe-run",
+          "source": "native"
+        },
+        {
+          "id": "3ac05fe2e4ba4c20a138014394294019",
+          "seq": 3,
+          "role": "user",
+          "content": [
+            {
+              "content": "wrote 6 bytes to marker.txt",
+              "tool_use_id": "model-tool-id",
+              "type": "tool_result"
+            }
+          ],
+          "run_id": "probe-run",
+          "source": "native"
+        }
+      ],
+      "call": {
+        "call_id": "961aa4996caf4921a0f689bb8a9fa2be",
+        "session_id": "sess-2c25cfce81c5",
+        "run_id": "probe-run",
+        "step": 1,
+        "ordinal": 0,
+        "tool_use_id": "model-tool-id",
+        "name": "write_file",
+        "input": {
+          "content": "effect",
+          "path": "marker.txt"
+        },
+        "params_hash": "2b245ec61b450102d17b5d9736cf33df8f9bc5f6bb406ae1e40f6fc071f130e9",
+        "input_hash": "2b245ec61b450102d17b5d9736cf33df8f9bc5f6bb406ae1e40f6fc071f130e9",
+        "effect": "write",
+        "retry_safe": false,
+        "workspace": "C:\\Users\\moxi\\AppData\\Local\\Temp\\kama-s82-crash-_4h3bncq\\final_before",
+        "status": "succeeded",
+        "result": {
+          "attempts": [
+            {
+              "attempt_id": "381af8a5785846b4a818b4b02413a28e",
+              "cleanup_confirmed": null,
+              "error_type": null,
+              "number": 1,
+              "outcome": "known"
+            }
+          ],
+          "call_id": "961aa4996caf4921a0f689bb8a9fa2be",
+          "cleanup_confirmed": null,
+          "content": "wrote 6 bytes to marker.txt",
+          "error_type": null,
+          "is_error": false,
+          "outcome": "known",
+          "transient": false
+        },
+        "created_at": "2026-09-23T13:55:17.635836+00:00",
+        "updated_at": "2026-09-23T13:55:17.637521+00:00"
+      },
+      "attempts": [
+        {
+          "attempt_id": "381af8a5785846b4a818b4b02413a28e",
+          "call_id": "961aa4996caf4921a0f689bb8a9fa2be",
+          "number": 1,
+          "attempt_no": 1,
+          "phase": "result_committed",
+          "outcome": "known",
+          "error_type": null,
+          "cleanup_confirmed": null,
+          "result": {
+            "attempts": [
+              {
+                "attempt_id": "381af8a5785846b4a818b4b02413a28e",
+                "cleanup_confirmed": null,
+                "error_type": null,
+                "number": 1,
+                "outcome": "known"
+              }
+            ],
+            "call_id": "961aa4996caf4921a0f689bb8a9fa2be",
+            "cleanup_confirmed": null,
+            "content": "wrote 6 bytes to marker.txt",
+            "error_type": null,
+            "is_error": false,
+            "outcome": "known",
+            "transient": false
+          },
+          "started_at": "2026-09-23T13:55:17.636856+00:00",
+          "finished_at": "2026-09-23T13:55:17.637521+00:00"
+        }
+      ],
+      "checkpoint": {
+        "run_id": "probe-run",
+        "version": 4,
+        "seq": 3,
+        "message_seq": 3,
+        "step": 1,
+        "status": "running",
+        "reason": null,
+        "pending": [],
+        "pending_calls": [],
+        "pending_call_ids": [],
+        "next_action": "model",
+        "summary_ref": null,
+        "summary_from": null,
+        "summary_to": null,
+        "updated_at": "2026-09-23T13:55:17.637521+00:00"
+      },
+      "run": {
+        "run_id": "probe-run",
+        "id": "probe-run",
+        "session_id": "sess-2c25cfce81c5",
+        "parent_run_id": null,
+        "workspace": "C:\\Users\\moxi\\AppData\\Local\\Temp\\kama-s82-crash-_4h3bncq\\final_before",
+        "status": "running",
+        "reason": null,
+        "step": 1,
+        "created_at": "2026-09-23T13:55:17.629644+00:00",
+        "updated_at": "2026-09-23T13:55:17.635836+00:00"
+      },
+      "verified": true
+    }
+  ]
+}

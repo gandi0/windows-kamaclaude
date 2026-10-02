@@ -1,0 +1,40 @@
+{"check": "unit", "command": ["F:\\exercise\\2026\\kamaclaude - v1\\KamaClaude\\.venv\\Scripts\\python.exe", "-m", "pytest", "tests/unit", "-v", "--tb=short", "--basetemp", "C:\\Users\\moxi\\AppData\\Local\\Temp\\kama-s8-unit-cqqp1c3s\\pytest"], "exit_code": 2, "seconds": 3.047}
+============================= test session starts =============================
+platform win32 -- Python 3.12.14, pytest-9.1.1, pluggy-1.6.0 -- F:\exercise\2026\kamaclaude - v1\KamaClaude\.venv\Scripts\python.exe
+cachedir: .pytest_cache
+rootdir: F:\wend\ChatGPT\kamaclaude优化\.s82-work\main
+configfile: pyproject.toml
+asyncio: mode=Mode.AUTO, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collecting ... collected 297 items / 1 error
+
+=================================== ERRORS ====================================
+___________________ ERROR collecting tests/unit/test_app.py ___________________
+ImportError while importing test module 'F:\wend\ChatGPT\kamaclaude优化\.s82-work\main\tests\unit\test_app.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+C:\Users\moxi\AppData\Roaming\uv\python\cpython-3.12-windows-x86_64-none\Lib\importlib\__init__.py:90: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\unit\test_app.py:11: in <module>
+    from kama_claude.core import app as app_module
+src\kama_claude\core\app.py:19: in <module>
+    from kama_claude.core.bus.commands import (
+src\kama_claude\core\bus\__init__.py:1: in <module>
+    from kama_claude.core.bus.commands import Command, PingCommand, PongResult
+src\kama_claude\core\bus\commands.py:7: in <module>
+    from kama_claude.core.session.model import SessionMode, SessionStatus
+src\kama_claude\core\session\__init__.py:1: in <module>
+    from kama_claude.core.session.manager import SessionManager
+src\kama_claude\core\session\manager.py:20: in <module>
+    from kama_claude.core.session.execution import StorageError
+src\kama_claude\core\session\execution.py:14: in <module>
+    from kama_claude.core.tools.base import ToolResult
+src\kama_claude\core\tools\__init__.py:2: in <module>
+    from kama_claude.core.tools.invocation import invoke_tool
+src\kama_claude\core\tools\invocation.py:22: in <module>
+    from kama_claude.core.session.execution import StorageError
+E   ImportError: cannot import name 'StorageError' from partially initialized module 'kama_claude.core.session.execution' (most likely due to a circular import) (F:\wend\ChatGPT\kamaclaude优化\.s82-work\main\src\kama_claude\core\session\execution.py)
+=========================== short test summary info ===========================
+ERROR tests/unit/test_app.py
+!!!!!!!!!!!!!!!!!!! Interrupted: 1 error during collection !!!!!!!!!!!!!!!!!!!!
+============================== 1 error in 2.14s ===============================

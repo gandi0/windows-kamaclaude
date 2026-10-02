@@ -1,0 +1,2 @@
+{"check": "protocol", "command": ["F:\\exercise\\2026\\kamaclaude - v1\\KamaClaude\\.venv\\Scripts\\python.exe", "scripts/gen_protocol_doc.py", "--check"], "exit_code": 0, "seconds": 0.578}
+OK: F:\exercise\2026\kamaclaude - v1\KamaClaude\WIRE_PROTOCOL.md is up to date.
